@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.service.MessageService;
 import java.util.List;
 
-public class HelpCommand implements Command{
+public class HelpCommand implements Command {
     @Override
     public String name() {
         return "/help";

@@ -4,14 +4,16 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
+import java.util.List;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class MessageService {
 
     private static final String UNKNOWN_COMMAND = "Команда не распознана!";
+
+    private MessageService() {}
 
     public static String checkUpdate(Update update, TelegramBot bot) {
         if (update.message() == null) {

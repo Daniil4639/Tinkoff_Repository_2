@@ -4,8 +4,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.service.MessageService;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.util.List;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class UpdateRunnerBot {
 
