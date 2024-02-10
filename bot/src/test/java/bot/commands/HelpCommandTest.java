@@ -1,6 +1,6 @@
-package bot.controller;
+package bot.commands;
 
-import edu.java.bot.controller.BotUtilities;
+import edu.java.bot.commands.HelpCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.regex.Matcher;
@@ -12,12 +12,12 @@ public class HelpCommandTest {
     @Test
     @DisplayName("Проверка вывода списка доступных команд")
     void helpCommandTest() {
-        String result = BotUtilities.help();
-        String[] lines = result.split(System.lineSeparator());
-        Pattern pattern = Pattern.compile("\\d*\\. /[a-z]* - [а-яА-Я]*");
+        HelpCommand help = new HelpCommand();
+        Pattern pattern = Pattern.compile("/[a-zA-Z]* - [а-яА-Я ]*");
 
-        for (int ind = 2; ind < lines.length; ind++) {
-            Matcher matcher = pattern.matcher(lines[ind]);
+        String[] messageLines = help.message().split(System.lineSeparator());
+        for (int i = 2; i < messageLines.length; i++) {
+            Matcher matcher = pattern.matcher(messageLines[i]);
 
             assertThat(matcher.find()).isTrue();
         }
