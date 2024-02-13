@@ -5,18 +5,24 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.service.MessageService;
 import java.util.List;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class UpdateRunnerBot {
 
+    private final Logger logger = LogManager.getLogger();
     private final TelegramBot bot;
 
-    public UpdateRunnerBot(String token, AnnotationConfigApplicationContext context) {
-        bot = (TelegramBot) context.getBean(
-            "getBot", TelegramBot.class, token);
+    public UpdateRunnerBot(TelegramBot bot) {
+        this.bot = bot;
+        this.run();
     }
 
     public void run() {
+        logger.info("Telegram-Bot is running!");
+
         bot.setUpdatesListener(new UpdatesListener() {
             @Override
             public int process(List<Update> list) {
