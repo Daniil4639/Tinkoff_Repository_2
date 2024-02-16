@@ -28,7 +28,7 @@ public class CheckUpdateTest extends AbstractTest {
         messageField.setAccessible(true);
         messageField.set(update, message);
 
-        assertThat(messageService.checkUpdate(update, null)).isEqualTo(answer);
+        assertThat(messageService.checkUpdate(update, bot)).isEqualTo(answer);
     }
 
     private static Stream<Arguments> provideArguments() {
