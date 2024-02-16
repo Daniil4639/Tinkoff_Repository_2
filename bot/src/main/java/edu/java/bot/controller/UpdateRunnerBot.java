@@ -5,31 +5,31 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.service.MessageService;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Slf4j
 public class UpdateRunnerBot {
 
-    private final Logger logger = LogManager.getLogger();
     private final TelegramBot bot;
+    private final MessageService messageService;
 
-    public UpdateRunnerBot(TelegramBot bot) {
+    public UpdateRunnerBot(TelegramBot bot, MessageService messageService) {
         this.bot = bot;
+        this.messageService = messageService;
         this.run();
     }
 
     public void run() {
-        logger.info("Telegram-Bot is running!");
+        log.info("Telegram-Bot is running!");
 
-        bot.setUpdatesListener(new UpdatesListener() {
-            @Override
-            public int process(List<Update> list) {
-                list.forEach(update -> MessageService.checkUpdate(update, bot));
+        bot.setUpdatesListener(list -> {
+            list.forEach(update -> messageService.checkUpdate(update, bot));
 
-                return UpdatesListener.CONFIRMED_UPDATES_ALL;
-            }
+            return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
 }

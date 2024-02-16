@@ -11,52 +11,43 @@ import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+@Getter
 public class MessageService {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final String UNKNOWN_COMMAND = "Команда не распознана!";
+    private final List<Command> commands;
 
-    private MessageService() {}
-
-    public static String checkUpdate(Update update, TelegramBot bot) {
+    public String checkUpdate(Update update, TelegramBot bot) {
         if (update.message() == null) {
             return null;
-        } else {
+        }
 
-            for (Command command: MessageService.commands()) {
-                if (command.name().equals(update.message().text())) {
-                    try {
-                        bot.execute(command.handle(update));
-                    } catch (Exception exception) {
-                        LOGGER.info("Incorrect SendMessage handler!");
-                    }
-
-                    return command.message();
+        for (Command command: commands) {
+            if (command.name().equals(update.message().text())) {
+                try {
+                    bot.execute(command.handle(update));
+                } catch (Exception exception) {
+                    log.error("Incorrect SendMessage handler!", exception);
                 }
+
+                return command.message();
             }
         }
 
+        String UNKNOWN_COMMAND = "Команда не распознана!";
         try {
             bot.execute(new SendMessage(update.message().chat().id(), UNKNOWN_COMMAND));
         } catch (Exception exception) {
-            LOGGER.info("Received Update hasn't enough information for sending message!");
+            log.error("Received Update hasn't enough information for sending message!", exception);
         }
 
         return UNKNOWN_COMMAND;
-    }
-
-    public static List<? extends Command> commands() {
-        return Arrays.asList(
-            new StartCommand(),
-            new HelpCommand(),
-            new TrackCommand(),
-            new UntrackCommand(),
-            new ListCommand()
-        );
     }
 }

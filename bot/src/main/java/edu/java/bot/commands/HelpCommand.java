@@ -3,7 +3,9 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.service.MessageService;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,13 +28,12 @@ public class HelpCommand implements Command {
 
     @Override
     public String message() {
-        List<? extends Command> commands = MessageService.commands();
-        StringBuilder string = new StringBuilder("Поведение бота контролируется следующими командами:");
-        string.append(System.lineSeparator()).append(System.lineSeparator());
-
-        commands.forEach(elem -> string.append(elem.name()).append(" - ").append(elem.description())
-            .append(System.lineSeparator()));
-
-        return string.toString();
+        return """
+                /start - зарегистрировать пользователя
+                /help - вывести окно с командами
+                /track - начать отслеживание ссылки
+                /untrack - прекратить отслеживание ссылки
+                /list - показать список отслеживаемых ссылок
+                """;
     }
 }
