@@ -4,12 +4,6 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
-import edu.java.bot.commands.HelpCommand;
-import edu.java.bot.commands.ListCommand;
-import edu.java.bot.commands.StartCommand;
-import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.commands.UntrackCommand;
-import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +17,19 @@ import org.springframework.stereotype.Service;
 public class MessageService {
 
     private final List<Command> commands;
+    private final String emptyMessage = "Empty message!";
 
     public String checkUpdate(Update update, TelegramBot bot) {
         if (update.message() == null) {
-            return null;
+            log.error(emptyMessage);
+            return emptyMessage;
         }
 
         for (Command command: commands) {
             if (command.name().equals(update.message().text())) {
                 try {
                     bot.execute(command.handle(update));
+                    log.info("Message has been sent by: " + command.name());
                 } catch (Exception exception) {
                     log.error("Incorrect SendMessage handler!", exception);
                 }
@@ -41,13 +38,14 @@ public class MessageService {
             }
         }
 
-        String UNKNOWN_COMMAND = "Команда не распознана!";
+        String unknownCommand = "Команда не распознана!";
         try {
-            bot.execute(new SendMessage(update.message().chat().id(), UNKNOWN_COMMAND));
+            bot.execute(new SendMessage(update.message().chat().id(), unknownCommand));
+            log.info("Command was not recognized!");
         } catch (Exception exception) {
             log.error("Received Update hasn't enough information for sending message!", exception);
         }
 
-        return UNKNOWN_COMMAND;
+        return unknownCommand;
     }
 }
