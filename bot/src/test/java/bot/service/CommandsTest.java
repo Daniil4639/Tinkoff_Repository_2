@@ -11,7 +11,7 @@ public class CommandsTest extends AbstractTest {
 
     @Test
     public void commandsTest() {
-        List<? extends Command> commands = messageService.getCommands();
+        List<Command> commands = messageService.getCommands();
 
         assertThat(commands.stream().map(Command::name).toArray())
             .contains("/start", "/list", "/untrack", "/track", "/help");

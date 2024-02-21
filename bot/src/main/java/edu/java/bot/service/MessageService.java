@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Getter
 public class MessageService {
 
+    private final String unknownCommand = "Команда не распознана!";
     private final List<Command> commands;
     private final String emptyMessage = "Empty message!";
 
@@ -38,7 +39,6 @@ public class MessageService {
             }
         }
 
-        String unknownCommand = "Команда не распознана!";
         try {
             bot.execute(new SendMessage(update.message().chat().id(), unknownCommand));
             log.info("Command was not recognized!");
