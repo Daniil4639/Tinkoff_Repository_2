@@ -1,10 +1,11 @@
 app:
-  gitHubBaseUrl: https://api.github.com/
-  stackOverFlowBaseUrl: https://api.stackexchange.com/2.3/questions/
+  api:
+    github-base-url: https://api.github.com/
+    stackoverflow-base-url: https://api.stackexchange.com/2.3/questions/
   scheduler:
     enable: true
     interval: 10s
-    forceCheckDelay: 10s
+    force-check-delay: 10s
 
 spring:
   application:

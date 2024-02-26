@@ -2,7 +2,6 @@ package edu.java.clients;
 
 import edu.java.response.GitHubResponse;
 import org.springframework.http.MediaType;
-import reactor.core.publisher.Mono;
 
 public class GitHubClient extends Client {
 
@@ -10,13 +9,13 @@ public class GitHubClient extends Client {
         super(baseUrl);
     }
 
-    public GitHubResponse getGitHubInfo(String url) {
-        Mono<GitHubResponse> response = client.get()
-            .uri(url)
+    public GitHubResponse getInfo(String user, String repos) {
+        return client.get()
+            .uri("/repos/{user}/{repos}", user, repos)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(GitHubResponse.class).log();
-
-        return response.block();
+            .bodyToMono(GitHubResponse.class)
+            .log()
+            .block();
     }
 }

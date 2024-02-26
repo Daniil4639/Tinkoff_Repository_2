@@ -1,10 +1,9 @@
 package edu.java.clients;
 
 import edu.java.response.StackOverFlowResponse;
-import lombok.Getter;
-import lombok.Setter;
+import edu.java.response.StackOverFlowResponseItems;
+import java.util.Objects;
 import org.springframework.http.MediaType;
-import reactor.core.publisher.Mono;
 
 public class StackOverflowClient extends Client {
 
@@ -12,19 +11,17 @@ public class StackOverflowClient extends Client {
         super(url);
     }
 
-    public StackOverFlowResponse getStackOverFlowInfo(String url) {
-        Mono<ResponseArray> response = client.get()
+    public StackOverFlowResponse getInfo(String id) {
+        String url = id + "?site=stackoverflow";
+
+        return Objects.requireNonNull(client.get()
             .uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(ResponseArray.class).log();
-
-        return response.block().getItems()[0];
-    }
-
-    @Getter
-    @Setter
-    private static class ResponseArray {
-        private StackOverFlowResponse[] items;
+            .bodyToMono(StackOverFlowResponseItems.class)
+            .log()
+            .block())
+            .getResponseList()
+            .getFirst();
     }
 }

@@ -10,11 +10,11 @@ public class ClientConfiguration {
 
     @Bean
     public GitHubClient getGitHubClient(ApplicationConfig config) {
-        return new GitHubClient(config.gitHubBaseUrl());
+        return new GitHubClient(config.api().gitHubBaseUrl());
     }
 
     @Bean
     public StackOverflowClient getStackOverflowClient(ApplicationConfig config) {
-        return new StackOverflowClient(config.stackOverFlowBaseUrl());
+        return new StackOverflowClient(config.api().stackOverFlowBaseUrl());
     }
 }

@@ -1,19 +1,21 @@
 package edu.java.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@SuppressWarnings("MemberName")
+@RequiredArgsConstructor
 public class StackOverFlowResponse {
-    private String title;
-    private String link;
-    private OffsetDateTime creation_date;
-    private OffsetDateTime last_edit_date;
-
-    public ResourceResponse getResponse() {
-        return new ResourceResponse(title, link, creation_date, last_edit_date);
-    }
+    @JsonProperty("title")
+    private String questionName;
+    @JsonProperty("link")
+    private String questionLink;
+    @JsonProperty("creation_date")
+    private OffsetDateTime creationDate;
+    @JsonProperty("last_activity_date")
+    private OffsetDateTime lastUpdate;
 }

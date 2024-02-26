@@ -1,19 +1,21 @@
 package edu.java.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@SuppressWarnings("MemberName")
+@RequiredArgsConstructor
 public class GitHubResponse {
-    private String name;
-    private String html_url;
-    private OffsetDateTime created_at;
-    private OffsetDateTime updated_at;
-
-    public ResourceResponse getResponse() {
-        return new ResourceResponse(name, html_url, created_at, updated_at);
-    }
+    @JsonProperty("name")
+    private String reposName;
+    @JsonProperty("html_url")
+    private String reposLink;
+    @JsonProperty("created_at")
+    private OffsetDateTime creationDate;
+    @JsonProperty("updated_at")
+    private OffsetDateTime lastUpdate;
 }
