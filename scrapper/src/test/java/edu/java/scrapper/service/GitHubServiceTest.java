@@ -1,6 +1,6 @@
 package edu.java.scrapper.service;
 
-import edu.java.response.GitHubResponse;
+import edu.java.response.resource.GitHubResponse;
 import edu.java.scrapper.AbstractTest;
 import edu.java.service.GitHubService;
 import org.apache.http.HttpStatus;

@@ -20,5 +20,6 @@ public record ApplicationConfig(
                             @NotNull Duration forceCheckDelay) {}
 
     public record ApiConfig(@NotNull String gitHubBaseUrl,
-                            @NotNull String stackOverFlowBaseUrl) {}
+                            @NotNull String stackOverFlowBaseUrl,
+                            @NotNull String botBaseUrl) {}
 }

@@ -1,6 +1,6 @@
 package edu.java.clients;
 
-import edu.java.response.GitHubResponse;
+import edu.java.response.resource.GitHubResponse;
 import org.springframework.http.MediaType;
 
 public class GitHubClient extends Client {

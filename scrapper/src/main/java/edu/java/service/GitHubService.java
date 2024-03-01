@@ -1,7 +1,7 @@
 package edu.java.service;
 
 import edu.java.clients.GitHubClient;
-import edu.java.response.GitHubResponse;
+import edu.java.response.resource.GitHubResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

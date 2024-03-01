@@ -1,5 +1,6 @@
 app:
   api:
+    bot-base-url: http://localhost:8090
     github-base-url: https://api.github.com/
     stackoverflow-base-url: https://api.stackexchange.com/2.3/questions/
   scheduler:
@@ -16,3 +17,10 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
