@@ -1,4 +1,4 @@
-package edu.java.bot.responses;
+package edu.java.bot.requests;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

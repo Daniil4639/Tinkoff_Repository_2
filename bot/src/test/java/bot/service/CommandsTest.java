@@ -1,13 +1,12 @@
 package bot.service;
 
-import bot.AbstractTest;
+import bot.AbstractServiceTest;
 import edu.java.bot.commands.Command;
-import edu.java.bot.service.MessageService;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class CommandsTest extends AbstractTest {
+public class CommandsTest extends AbstractServiceTest {
 
     @Test
     public void commandsTest() {

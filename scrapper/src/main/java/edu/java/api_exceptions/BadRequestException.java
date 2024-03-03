@@ -2,11 +2,11 @@ package edu.java.api_exceptions;
 
 import org.springframework.web.reactive.function.client.ClientResponse;
 
-public class ApiResponseErrorException extends Exception {
+public class BadRequestException extends Exception {
 
     public final ClientResponse response;
 
-    public ApiResponseErrorException(ClientResponse response) {
+    public BadRequestException(ClientResponse response) {
         this.response = response;
     }
 }

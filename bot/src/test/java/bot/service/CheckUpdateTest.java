@@ -1,6 +1,6 @@
 package bot.service;
 
-import bot.AbstractTest;
+import bot.AbstractServiceTest;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
@@ -8,13 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import java.lang.reflect.Field;
 import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CheckUpdateTest extends AbstractTest {
+public class CheckUpdateTest extends AbstractServiceTest {
 
     @ParameterizedTest(name = "#{index} - Run with args = {0}")
     @MethodSource("provideArguments")

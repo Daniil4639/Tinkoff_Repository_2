@@ -1,7 +1,7 @@
 package edu.java.scrapper.service;
 
 import edu.java.response.resource.GitHubResponse;
-import edu.java.scrapper.AbstractTest;
+import edu.java.scrapper.AbstractClientTest;
 import edu.java.service.GitHubService;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GitHubServiceTest extends AbstractTest {
+public class GitHubServiceTest extends AbstractClientTest {
 
     private final static String GUT_HUB_JSON = """
         {

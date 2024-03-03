@@ -1,8 +1,7 @@
 package edu.java.clients;
 
-import edu.java.api_exceptions.ApiResponseErrorException;
+import edu.java.api_exceptions.BadRequestException;
 import edu.java.requests.api.LinkUpdateRequest;
-import edu.java.response.api.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
@@ -12,7 +11,7 @@ public class BotClient extends Client {
         super(url);
     }
 
-    public ApiErrorResponse updateLink(String url, int[] tgChatIds) {
+    public Mono<String> updateLink(String url, int[] tgChatIds) {
         LinkUpdateRequest request = new LinkUpdateRequest(
             1, url, "Обновить ссылку", tgChatIds);
 
@@ -22,10 +21,8 @@ public class BotClient extends Client {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new ApiResponseErrorException(response))
+                response -> Mono.error(new BadRequestException(response))
             )
-            .bodyToMono(ApiErrorResponse.class)
-            .onErrorResume(ApiResponseErrorException.class, ex -> ex.response.bodyToMono(ApiErrorResponse.class))
-            .block();
+            .bodyToMono(String.class);
     }
 }

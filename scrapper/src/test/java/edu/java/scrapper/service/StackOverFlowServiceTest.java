@@ -1,7 +1,7 @@
 package edu.java.scrapper.service;
 
 import edu.java.response.resource.StackOverFlowResponse;
-import edu.java.scrapper.AbstractTest;
+import edu.java.scrapper.AbstractClientTest;
 import edu.java.service.StackOverFlowService;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class StackOverFlowServiceTest extends AbstractTest {
+public class StackOverFlowServiceTest extends AbstractClientTest {
 
     private final static String STACK_OVER_FLOW_JSON = """
         {

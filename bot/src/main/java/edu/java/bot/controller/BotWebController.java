@@ -1,8 +1,8 @@
 package edu.java.bot.controller;
 
 import edu.java.bot.api_exceptions.IncorrectUpdateRequest;
+import edu.java.bot.requests.LinkUpdateRequest;
 import edu.java.bot.responses.ApiErrorResponse;
-import edu.java.bot.responses.LinkUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
