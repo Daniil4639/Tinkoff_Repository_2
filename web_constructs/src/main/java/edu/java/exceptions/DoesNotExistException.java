@@ -1,4 +1,4 @@
-package edu.java.api_exceptions;
+package edu.java.exceptions;
 
 public class DoesNotExistException extends Exception {
 

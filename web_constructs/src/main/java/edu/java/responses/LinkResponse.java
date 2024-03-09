@@ -1,4 +1,4 @@
-package edu.java.bot.requests;
+package edu.java.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class RemoveLinkRequest {
+public class LinkResponse {
 
-    private String link;
+    private Integer id;
+    private String url;
 }

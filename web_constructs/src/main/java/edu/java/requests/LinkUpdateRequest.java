@@ -1,4 +1,4 @@
-package edu.java.response.api;
+package edu.java.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LinkResponse {
+public class LinkUpdateRequest {
 
     private Integer id;
     private String url;
+    private String description;
+    private int[] tgChatIds;
 }

@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("test")
 public class AbstractClientTest {
 
+    private final static int PORT = 1234;
     private WireMockServer wireMockServer;
 
     @Autowired
@@ -25,10 +26,9 @@ public class AbstractClientTest {
 
     @Before
     public void startServer() {
-        int port = 1234;
-        wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(port));
+        wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(PORT));
         wireMockServer.start();
-        WireMock.configureFor("localhost", port);
+        WireMock.configureFor("localhost", PORT);
     }
 
     @After

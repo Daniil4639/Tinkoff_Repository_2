@@ -1,4 +1,4 @@
-package edu.java.requests.api;
+package edu.java.responses;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class RemoveLinkRequest {
+public class BotApiError {
 
-    private String link;
+    private String exceptionMessage;
 }

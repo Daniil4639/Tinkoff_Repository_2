@@ -1,7 +1,7 @@
 package edu.java.clients;
 
-import edu.java.response.resource.StackOverFlowResponse;
-import edu.java.response.resource.StackOverFlowResponseItems;
+import edu.java.response.StackOverFlowResponse;
+import edu.java.response.StackOverFlowResponseItems;
 import java.util.Objects;
 import org.springframework.http.MediaType;
 

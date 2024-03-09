@@ -1,4 +1,4 @@
-package edu.java.response.resource;
+package edu.java.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
@@ -9,13 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class GitHubResponse {
-    @JsonProperty("name")
-    private String reposName;
-    @JsonProperty("html_url")
-    private String reposLink;
-    @JsonProperty("created_at")
+public class StackOverFlowResponse {
+    @JsonProperty("title")
+    private String questionName;
+    @JsonProperty("link")
+    private String questionLink;
+    @JsonProperty("creation_date")
     private OffsetDateTime creationDate;
-    @JsonProperty("updated_at")
+    @JsonProperty("last_activity_date")
     private OffsetDateTime lastUpdate;
 }
