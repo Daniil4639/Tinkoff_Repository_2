@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest(classes = {BotApplication.class})
-public class AbstractTest {
+public class AbstractServiceTest {
 
     @Autowired
     protected MessageService messageService;
