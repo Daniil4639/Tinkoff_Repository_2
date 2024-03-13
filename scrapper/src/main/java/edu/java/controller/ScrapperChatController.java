@@ -2,13 +2,12 @@ package edu.java.controller;
 
 import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.api_exceptions.IncorrectChatOperationRequest;
-import edu.java.response.api.ApiErrorResponse;
 import edu.java.jdbc.JdbcChatService;
+import edu.java.response.api.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,15 +1,13 @@
 package edu.java.scheduler;
 
 import edu.java.clients.BotClient;
-import edu.java.jdbc.JdbcLinksService;
 import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.api.ListLinksResponse;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import java.util.Arrays;
 
 @Component
 @Slf4j
@@ -23,13 +21,19 @@ public class LinkUpdateScheduler {
 
     @Scheduled(fixedDelayString = "#{@schedulerInterval}")
     public void update() {
-        LinkDataBaseInfo[] list = schedulerService.getOldLinks(2);
+        LinkDataBaseInfo[] list;
 
-        log.info("Ссылок давно не обновлялось: " + ((list==null)?(0):(list.length)));
+        try {
+            list = schedulerService.getOldLinks(2);
 
-        if (list==null) {
+            if (list == null) {
+                throw new Exception("");
+            }
+        } catch (Exception ex) {
             return;
         }
+
+        log.info("Ссылок давно не обновлялось: " + list.length);
 
         for (LinkDataBaseInfo linkInfo: list) {
             if (schedulerService.hadUpdated(linkInfo)) {

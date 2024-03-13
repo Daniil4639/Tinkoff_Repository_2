@@ -1,17 +1,15 @@
 package edu.java.scheduler;
 
 import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.api.LinkResponse;
-import edu.java.response.api.ListLinksResponse;
 import edu.java.response.resource.GitHubResponse;
 import edu.java.response.resource.StackOverFlowResponse;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor

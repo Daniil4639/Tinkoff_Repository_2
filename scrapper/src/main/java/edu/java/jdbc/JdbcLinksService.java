@@ -7,13 +7,15 @@ import edu.java.response.resource.GitHubResponse;
 import edu.java.response.resource.StackOverFlowResponse;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class JdbcLinksService {
 
@@ -32,7 +34,7 @@ public class JdbcLinksService {
     public ListLinksResponse getLinksByChat(int chatId) {
         LinkResponse[] list = linkDao.getLinksByChatRequest(chatId);
 
-        return new ListLinksResponse(list, (list == null)?(0):(list.length));
+        return new ListLinksResponse(list, (list == null) ? (0) : (list.length));
     }
 
     public boolean addLink(int chatId, String link) {

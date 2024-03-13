@@ -2,12 +2,15 @@ package edu.java.domain;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Setter
 public class JdbcChatRepository {
 
     @Autowired
@@ -15,7 +18,8 @@ public class JdbcChatRepository {
 
     public void addChatRequest(int chatId) throws ChatAlreadyExistsException {
         try {
-            jdbcTemplate.execute("INSERT INTO Chats VALUES (" + chatId + ")");
+            jdbcTemplate.execute("INSERT INTO Chats VALUES (" + chatId + ", '"
+                + Timestamp.valueOf(LocalDateTime.now()) + "')");
         } catch (Exception ex) {
             throw new ChatAlreadyExistsException("Чат уже зарегистрирован");
         }

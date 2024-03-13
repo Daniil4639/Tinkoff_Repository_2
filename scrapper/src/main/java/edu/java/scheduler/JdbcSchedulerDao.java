@@ -1,18 +1,14 @@
 package edu.java.scheduler;
 
 import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.api.LinkResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcSchedulerDao {
@@ -33,13 +29,13 @@ public class JdbcSchedulerDao {
 
         for (LinkDataBaseInfo linkInfo: list) {
             linkInfo.setTgChatIds(jdbcTemplate.query(
-                "SELECT * FROM Chat_Link_Connection WHERE " +
-                "link_id=" + linkInfo.getId(), (rs, rowNum) -> rs.getInt("chat_id"))
+                "SELECT * FROM Chat_Link_Connection WHERE "
+                    + "link_id=" + linkInfo.getId(), (rs, rowNum) -> rs.getInt("chat_id"))
                 .toArray(new Integer[] {}));
         }
 
-        jdbcTemplate.update("UPDATE Links SET last_check = '" + Timestamp.valueOf(nowTime) +
-            "'");
+        jdbcTemplate.update("UPDATE Links SET last_check = '" + Timestamp.valueOf(nowTime)
+            + "'");
 
         return list;
     }
