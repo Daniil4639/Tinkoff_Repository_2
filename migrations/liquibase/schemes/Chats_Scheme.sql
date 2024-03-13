@@ -1,4 +1,4 @@
-create table Chats
+create table if not exists Chats
 (
     chat_id bigint,
 
