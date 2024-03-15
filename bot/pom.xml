@@ -54,6 +54,7 @@
         <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
+            <version>7.1.0</version>
         </dependency>
 
         <!-- Dev Tools -->

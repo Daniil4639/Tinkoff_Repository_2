@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +52,7 @@ public class ScrapperChatController {
                  content = {@Content(schema = @Schema(implementation = ApiErrorResponse.class))})
     @DeleteMapping(ID_MAPPING)
     @ResponseStatus(HttpStatus.OK)
-    public String chatDelete(@PathVariable Integer id) throws
+    public String chatDelete(@PathVariable Long id) throws
         IncorrectChatOperationRequest, DoesNotExistException {
 
         if (id == null) {
@@ -63,5 +64,58 @@ public class ScrapperChatController {
         }
 
         return "Чат успешно удалён";
+    }
+
+    @Operation(summary = "Установить Track")
+    @ApiResponse(responseCode = "200")
+    @PostMapping(ID_MAPPING + "/track")
+    @ResponseStatus(HttpStatus.OK)
+    public void makeTrack(@PathVariable Long id) {
+        chatService.makeTrack(id);
+    }
+
+    @Operation(summary = "Установить Untrack")
+    @ApiResponse(responseCode = "200")
+    @PostMapping(ID_MAPPING + "/untrack")
+    @ResponseStatus(HttpStatus.OK)
+    public void makeUntrack(@PathVariable Long id) {
+
+        chatService.makeUntrack(id);
+    }
+
+    @Operation(summary = "Удалить Track")
+    @ApiResponse(responseCode = "200")
+    @DeleteMapping(ID_MAPPING + "/track")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTrack(@PathVariable Long id) {
+
+        chatService.deleteTrack(id);
+    }
+
+    @Operation(summary = "Удалить Untrack")
+    @ApiResponse(responseCode = "200")
+    @DeleteMapping(ID_MAPPING + "/untrack")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUntrack(@PathVariable Long id) {
+
+        chatService.deleteUnrack(id);
+    }
+
+    @Operation(summary = "Проверить ожидание Track")
+    @ApiResponse(responseCode = "200")
+    @GetMapping(ID_MAPPING + "/track")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean checkTrack(@PathVariable Long id) {
+
+        return chatService.isTrack(id);
+    }
+
+    @Operation(summary = "Проверить ожидание Untrack")
+    @ApiResponse(responseCode = "200")
+    @GetMapping(ID_MAPPING + "/untrack")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean checkUntrack(@PathVariable Long id) {
+
+        return chatService.isUntrack(id);
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Getter
 public class MessageService {
+
+    @Autowired
+    private LinkProcessor linkProcessor;
 
     private final String unknownCommand = "Команда не распознана!";
     private final List<Command> commands;
@@ -28,6 +32,8 @@ public class MessageService {
 
         for (Command command: commands) {
             if (command.name().equals(update.message().text())) {
+                linkProcessor.clear(update.message().chat().id());
+
                 try {
                     bot.execute(command.handle(update));
                     log.info("Message has been sent by: " + command.name());
@@ -37,6 +43,10 @@ public class MessageService {
 
                 return command.message();
             }
+        }
+
+        if (linkProcessor.checkLink(update)) {
+            return "Ссылка обработана!";
         }
 
         try {

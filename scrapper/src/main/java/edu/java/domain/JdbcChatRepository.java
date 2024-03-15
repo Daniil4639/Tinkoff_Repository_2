@@ -16,16 +16,16 @@ public class JdbcChatRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void addChatRequest(int chatId) throws ChatAlreadyExistsException {
+    public void addChatRequest(long chatId) throws ChatAlreadyExistsException {
         try {
-            jdbcTemplate.execute("INSERT INTO Chats VALUES (" + chatId + ", '"
+            jdbcTemplate.execute("INSERT INTO Chats VALUES (" + chatId + ", 0, 0, '"
                 + Timestamp.valueOf(LocalDateTime.now()) + "')");
         } catch (Exception ex) {
             throw new ChatAlreadyExistsException("Чат уже зарегистрирован");
         }
     }
 
-    public void deleteChatRequest(int chatId) throws DoesNotExistException {
+    public void deleteChatRequest(long chatId) throws DoesNotExistException {
         Integer count = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chats WHERE chat_id=?",
                 Integer.class, chatId);
 
@@ -35,5 +35,36 @@ public class JdbcChatRepository {
 
         jdbcTemplate.execute("DELETE FROM Chat_Link_Connection WHERE chat_id=" + chatId);
         jdbcTemplate.execute("DELETE FROM Chats WHERE chat_id=" + chatId);
+    }
+
+    public void makeTrack(long chatId) {
+        jdbcTemplate.update("UPDATE Chats SET wait_track=1 "
+            + "WHERE chat_id=" + chatId);
+    }
+
+    public void makeUntrack(long chatId) {
+        jdbcTemplate.update("UPDATE Chats SET wait_untrack=1 WHERE chat_id=" + chatId);
+    }
+
+    public void deleteTrack(long chatId) {
+        jdbcTemplate.update("UPDATE Chats SET wait_track=0 WHERE chat_id=" + chatId);
+    }
+
+    public void deleteUntrack(long chatId) {
+        jdbcTemplate.update("UPDATE Chats SET wait_untrack=0 WHERE chat_id=" + chatId);
+    }
+
+    public boolean isWaitingTrack(long chatId) {
+        Integer isWaiting = jdbcTemplate.queryForObject("SELECT wait_track FROM Chats WHERE "
+            + "chat_id = ?", Integer.class, chatId);
+
+        return isWaiting == 1;
+    }
+
+    public boolean isWaitingUntrack(long chatId) {
+        Integer isWaiting = jdbcTemplate.queryForObject("SELECT wait_untrack FROM Chats WHERE "
+            + "chat_id=?", Integer.class, chatId);
+
+        return isWaiting == 1;
     }
 }

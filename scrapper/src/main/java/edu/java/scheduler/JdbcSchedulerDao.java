@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -34,8 +35,17 @@ public class JdbcSchedulerDao {
                 .toArray(new Integer[] {}));
         }
 
-        jdbcTemplate.update("UPDATE Links SET last_check = '" + Timestamp.valueOf(nowTime)
-            + "'");
+        StringBuilder idStr = new StringBuilder();
+        for (int elem: Arrays.stream(list)
+            .mapToInt(LinkDataBaseInfo::getId).toArray()) {
+
+            idStr.append(elem).append(", ");
+        }
+
+        if (list.length != 0) {
+            jdbcTemplate.update("UPDATE Links SET last_check='" + Timestamp.valueOf(nowTime)
+                + "' WHERE id IN (" + idStr.delete(idStr.length() - 2, idStr.length() - 1) + ")");
+        }
 
         return list;
     }
