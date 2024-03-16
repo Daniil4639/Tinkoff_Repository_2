@@ -8,6 +8,8 @@ import edu.java.service.StackOverFlowService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,23 +33,43 @@ public class JdbcSchedulerService {
         return schedulerDao.getOldLinksRequest(minutesAgo);
     }
 
-    public boolean hadUpdated(LinkDataBaseInfo info) {
+    public Pair<Boolean, String> hadUpdated(LinkDataBaseInfo info) {
         Matcher matcher = gitHubPattern.matcher(info.getUrl());
 
         if (matcher.find()) {
-            GitHubResponse data = gitHubService.getGitHubInfo(matcher.group(1), matcher.group(2));
-
-            return data.getLastUpdate().equals(info.getLastUpdate());
+            return updateByGit(info, matcher);
         }
 
         matcher = stackOverFlowPattern.matcher(info.getUrl());
 
         if (matcher.find()) {
-            StackOverFlowResponse data = stackOverFlowService.getStackOverFlowInfo(matcher.group(1));
-
-            return data.getLastUpdate().equals(info.getLastUpdate());
+            return updateBySof(info, matcher);
         }
 
-        return false;
+        return new ImmutablePair<>(false, null);
+    }
+
+    private Pair<Boolean, String> updateByGit(LinkDataBaseInfo info, Matcher matcher) {
+        GitHubResponse data = gitHubService.getGitHubInfo(matcher.group(1), matcher.group(2));
+
+        boolean hadUpdate =  !data.getLastUpdate().equals(info.getLastUpdate());
+        if (!hadUpdate) {
+            return new ImmutablePair<>(false, null);
+        }
+
+        schedulerDao.updateLinkDate(info.getId(), data.getLastUpdate());
+        return new ImmutablePair<>(true, gitHubService
+            .getUpdateInfo(matcher.group(1), matcher.group(2), info.getLastUpdate()));
+    }
+
+    private Pair<Boolean, String> updateBySof(LinkDataBaseInfo info, Matcher matcher) {
+        StackOverFlowResponse data = stackOverFlowService.getStackOverFlowInfo(matcher.group(1));
+
+        boolean hadUpdate =  !data.getLastUpdate().equals(info.getLastUpdate());
+        if (hadUpdate) {
+            return new ImmutablePair<>(false, null);
+        }
+        schedulerDao.updateLinkDate(info.getId(), data.getLastUpdate());
+        return new ImmutablePair<>(true, null);
     }
 }

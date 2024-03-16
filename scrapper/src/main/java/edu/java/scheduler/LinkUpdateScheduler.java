@@ -3,7 +3,9 @@ package edu.java.scheduler;
 import edu.java.clients.BotClient;
 import edu.java.response.api.LinkDataBaseInfo;
 import java.util.Arrays;
+import edu.java.service.GitHubService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +26,7 @@ public class LinkUpdateScheduler {
         LinkDataBaseInfo[] list;
 
         try {
-            list = schedulerService.getOldLinks(2);
+            list = schedulerService.getOldLinks(1);
 
             if (list == null) {
                 throw new Exception("");
@@ -36,9 +38,13 @@ public class LinkUpdateScheduler {
         log.info("Ссылок давно не обновлялось: " + list.length);
 
         for (LinkDataBaseInfo linkInfo: list) {
-            if (schedulerService.hadUpdated(linkInfo)) {
+            Pair<Boolean, String> updateInfo = schedulerService.hadUpdated(linkInfo);
+            if (updateInfo.getLeft()) {
+
+                System.out.println(updateInfo.getRight());
+
                 log.info(client.updateLink(linkInfo.getUrl(), Arrays.stream(linkInfo.getTgChatIds())
-                    .mapToInt(Integer::intValue).toArray()).block());
+                    .mapToInt(Integer::intValue).toArray(), updateInfo.getRight()).block());
             }
         }
     }

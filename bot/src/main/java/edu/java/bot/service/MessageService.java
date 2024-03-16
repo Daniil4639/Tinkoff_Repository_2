@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import java.util.List;
+import edu.java.bot.requests.LinkUpdateRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,15 +20,17 @@ public class MessageService {
 
     @Autowired
     private LinkProcessor linkProcessor;
+    @Autowired
+    private TelegramBot bot;
 
     private final String unknownCommand = "Команда не распознана!";
     private final List<Command> commands;
     private final String emptyMessage = "Empty message!";
 
-    public String checkUpdate(Update update, TelegramBot bot) {
+    public void checkUpdate(Update update) {
         if (update.message() == null) {
             log.error(emptyMessage);
-            return emptyMessage;
+            return;
         }
 
         for (Command command: commands) {
@@ -41,12 +44,13 @@ public class MessageService {
                     log.error("Incorrect SendMessage handler!", exception);
                 }
 
-                return command.message();
+                command.message();
+                return;
             }
         }
 
         if (linkProcessor.checkLink(update)) {
-            return "Ссылка обработана!";
+            return;
         }
 
         try {
@@ -55,7 +59,11 @@ public class MessageService {
         } catch (Exception exception) {
             log.error("Received Update hasn't enough information for sending message!", exception);
         }
+    }
 
-        return unknownCommand;
+    public void sendUpdate(LinkUpdateRequest request) {
+        for (int chatId: request.getTgChatIds()) {
+            bot.execute(new SendMessage(chatId, request.getDescription()));
+        }
     }
 }

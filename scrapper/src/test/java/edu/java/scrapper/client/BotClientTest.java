@@ -27,7 +27,7 @@ public class BotClientTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(CORRECT_RESPONSE)));
 
-        Mono<String> response = client.updateLink("testLink", new int[] {1, 2, 3});
+        Mono<String> response = client.updateLink("testLink", new int[] {1, 2, 3}, "");
 
         assertThat(response.block()).isEqualTo(CORRECT_RESPONSE);
     }

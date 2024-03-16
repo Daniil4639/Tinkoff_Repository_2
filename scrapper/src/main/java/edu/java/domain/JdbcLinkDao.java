@@ -50,7 +50,7 @@ public class JdbcLinkDao {
         Timestamp lastCheck = Timestamp.valueOf(LocalDateTime.now());
 
         jdbcTemplate.update("INSERT INTO Links VALUES (DEFAULT, ?, ?, ?, ?) ON CONFLICT (url) DO NOTHING",
-            link, creation, lastUpdate, lastCheck);
+            link, lastUpdate, creation, lastCheck);
 
         jdbcTemplate.update("INSERT INTO Chat_Link_Connection VALUES ((SELECT chat_id FROM"
             + " Chats WHERE chat_id=" + chatId + "), (SELECT id FROM Links WHERE"

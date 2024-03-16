@@ -3,9 +3,11 @@ package edu.java.scheduler;
 import edu.java.response.api.LinkDataBaseInfo;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,7 +27,7 @@ public class JdbcSchedulerDao {
                 "SELECT * FROM Links WHERE last_check <= '" + Timestamp.valueOf(oldLinksTime) + "'",
                 (rs, rowNum) -> new LinkDataBaseInfo(rs.getInt("id"),
                     rs.getString("url"),
-                    createCorrectDate(rs.getDate("updated_at")), null))
+                    createCorrectDate(rs.getTimestamp("updated_at")), null))
             .toArray(new LinkDataBaseInfo[]{});
 
         for (LinkDataBaseInfo linkInfo: list) {
@@ -50,7 +52,12 @@ public class JdbcSchedulerDao {
         return list;
     }
 
-    private OffsetDateTime createCorrectDate(Date date) {
-        return date.toLocalDate().atTime(OffsetTime.now());
+    private OffsetDateTime createCorrectDate(Timestamp date) {
+        return date.toLocalDateTime().atOffset(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+    }
+
+    public void updateLinkDate(int linkId, OffsetDateTime newLastUpdateDate) {
+        jdbcTemplate.update("UPDATE Links SET updated_at='"
+            + Timestamp.valueOf(newLastUpdateDate.toLocalDateTime()) + "' WHERE id=" + linkId);
     }
 }

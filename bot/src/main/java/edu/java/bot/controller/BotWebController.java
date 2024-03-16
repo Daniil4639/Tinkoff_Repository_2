@@ -3,11 +3,13 @@ package edu.java.bot.controller;
 import edu.java.bot.api_exceptions.IncorrectUpdateRequest;
 import edu.java.bot.requests.LinkUpdateRequest;
 import edu.java.bot.responses.ApiErrorResponse;
+import edu.java.bot.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/updates")
 public class BotWebController {
+
+    @Autowired
+    private MessageService service;
 
     @Operation(summary = "Отправить обновление")
     @ApiResponses(value = {
@@ -36,6 +41,8 @@ public class BotWebController {
         if (request.getUrl() == null || request.getTgChatIds() == null) {
             throw new IncorrectUpdateRequest("Некорректные параметры запроса");
         }
+
+        service.sendUpdate(request);
 
         return "Обновление обработано";
     }

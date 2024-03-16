@@ -16,6 +16,6 @@ public class GitHubResponse {
     private String reposLink;
     @JsonProperty("created_at")
     private OffsetDateTime creationDate;
-    @JsonProperty("updated_at")
+    @JsonProperty("pushed_at")
     private OffsetDateTime lastUpdate;
 }

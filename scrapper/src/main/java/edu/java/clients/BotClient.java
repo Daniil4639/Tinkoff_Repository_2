@@ -11,9 +11,9 @@ public class BotClient extends Client {
         super(url);
     }
 
-    public Mono<String> updateLink(String url, int[] tgChatIds) {
+    public Mono<String> updateLink(String url, int[] tgChatIds, String text) {
         LinkUpdateRequest request = new LinkUpdateRequest(
-            1, url, "Обновить ссылку", tgChatIds);
+            1, url, text, tgChatIds);
 
         return client.post()
             .uri("/updates")
