@@ -3,7 +3,6 @@ package edu.java.scheduler;
 import edu.java.clients.BotClient;
 import edu.java.response.api.LinkDataBaseInfo;
 import java.util.Arrays;
-import edu.java.service.GitHubService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,6 @@ public class LinkUpdateScheduler {
         for (LinkDataBaseInfo linkInfo: list) {
             Pair<Boolean, String> updateInfo = schedulerService.hadUpdated(linkInfo);
             if (updateInfo.getLeft()) {
-
-                System.out.println(updateInfo.getRight());
 
                 log.info(client.updateLink(linkInfo.getUrl(), Arrays.stream(linkInfo.getTgChatIds())
                     .mapToInt(Integer::intValue).toArray(), updateInfo.getRight()).block());

@@ -1,9 +1,9 @@
 package edu.java.dto.github;
 
+import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import java.time.OffsetDateTime;
 
 @Setter
 @Getter

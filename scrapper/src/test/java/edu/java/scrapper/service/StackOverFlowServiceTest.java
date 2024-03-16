@@ -1,6 +1,6 @@
 package edu.java.scrapper.service;
 
-import edu.java.response.resource.StackOverFlowResponse;
+import edu.java.response.resource.sof.StackOverFlowResponse;
 import edu.java.scrapper.AbstractClientTest;
 import edu.java.service.StackOverFlowService;
 import org.apache.http.HttpStatus;

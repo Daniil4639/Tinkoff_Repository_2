@@ -1,12 +1,10 @@
 package edu.java.scheduler;
 
 import edu.java.response.api.LinkDataBaseInfo;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;

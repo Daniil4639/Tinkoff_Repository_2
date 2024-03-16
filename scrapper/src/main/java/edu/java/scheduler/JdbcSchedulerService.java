@@ -1,8 +1,8 @@
 package edu.java.scheduler;
 
 import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.resource.GitHubResponse;
-import edu.java.response.resource.StackOverFlowResponse;
+import edu.java.response.resource.github.GitHubResponse;
+import edu.java.response.resource.sof.StackOverFlowResponse;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
 import java.util.regex.Matcher;
@@ -66,10 +66,12 @@ public class JdbcSchedulerService {
         StackOverFlowResponse data = stackOverFlowService.getStackOverFlowInfo(matcher.group(1));
 
         boolean hadUpdate =  !data.getLastUpdate().equals(info.getLastUpdate());
-        if (hadUpdate) {
+        if (!hadUpdate) {
             return new ImmutablePair<>(false, null);
         }
+
         schedulerDao.updateLinkDate(info.getId(), data.getLastUpdate());
-        return new ImmutablePair<>(true, null);
+        return new ImmutablePair<>(true, stackOverFlowService
+            .getUpdateInfo(matcher.group(1), info.getLastUpdate(), data));
     }
 }

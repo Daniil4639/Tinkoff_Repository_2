@@ -3,14 +3,13 @@ package edu.java.clients;
 import edu.java.dto.github.BranchDto;
 import edu.java.dto.github.CommitDto;
 import edu.java.dto.github.CommitExtendedDto;
-import edu.java.response.resource.GitHubExtendedResponse;
-import edu.java.response.resource.GitHubResponse;
-import org.springframework.http.MediaType;
-import java.sql.Timestamp;
+import edu.java.response.resource.github.GitHubExtendedResponse;
+import edu.java.response.resource.github.GitHubResponse;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import org.springframework.http.MediaType;
 
 public class GitHubClient extends Client {
 

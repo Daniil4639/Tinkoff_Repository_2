@@ -2,15 +2,15 @@ package edu.java.service;
 
 import edu.java.clients.GitHubClient;
 import edu.java.dto.github.CommitDto;
-import edu.java.response.resource.GitHubExtendedResponse;
-import edu.java.response.resource.GitHubResponse;
+import edu.java.response.resource.github.GitHubExtendedResponse;
+import edu.java.response.resource.github.GitHubResponse;
 import java.time.OffsetDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("MultipleStringLiterals")
 public class GitHubService {
     private final GitHubClient gitHubClient;
 
@@ -29,7 +29,8 @@ public class GitHubService {
             .append(System.lineSeparator())
             .append("пользователя \"").append(userName).append("\":")
             .append(System.lineSeparator())
-            .append("(ссылка: https://github.com/").append(userName).append("/").append(repositoryName)
+            .append("(ссылка: https://github.com/").append(userName).append("/")
+            .append(repositoryName).append(")")
             .append(System.lineSeparator()).append(System.lineSeparator());
 
         for (int branchNum = 0; branchNum < response.getBranches().size(); branchNum++) {
