@@ -20,15 +20,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 public class JdbcTest extends IntegrationEnvironment {
 
-    @Autowired
-    private JdbcChatRepository repository;
-    @Autowired
-    private JdbcLinkDao linkDao;
+    private final static JdbcChatRepository repository;
+    private final static JdbcLinkDao linkDao;
 
-    @Before
-    public void configBefore() {
-        repository.setJdbcTemplate(template);
-        linkDao.setJdbcTemplate(template);
+    static {
+        repository = new JdbcChatRepository(template);
+        linkDao = new JdbcLinkDao(template);
     }
 
     @After

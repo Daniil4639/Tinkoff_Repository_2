@@ -1,5 +1,7 @@
 package edu.java.jdbc;
 
+import edu.java.api_exceptions.DoesNotExistException;
+import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.domain.JdbcLinkDao;
 import edu.java.response.api.LinkResponse;
 import edu.java.response.api.ListLinksResponse;
@@ -10,7 +12,6 @@ import edu.java.service.StackOverFlowService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,32 +20,39 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcLinksService {
 
-    @Autowired
-    private GitHubService gitHubService;
-    @Autowired
-    private StackOverFlowService stackOverFlowService;
-    @Autowired
-    private JdbcLinkDao linkDao;
+    private final GitHubService gitHubService;
+    private final StackOverFlowService stackOverFlowService;
+    private final JdbcLinkDao linkDao;
+    private final String incorrectRequestParams = "Некорректные параметры запроса";
 
     private final Pattern gitHubPattern =
         Pattern.compile("https://github.com/([a-zA-Z0-9-_.,]+)/([a-zA-Z0-9-_.,]+)");
     private final Pattern stackOverFlowPattern =
         Pattern.compile("https://stackoverflow.com/questions/([0-9]+)");
 
-    public ListLinksResponse getLinksByChat(int chatId) {
+    public ListLinksResponse getLinksByChat(Integer chatId) throws IncorrectChatOperationRequest {
+        if (chatId == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
         LinkResponse[] list = linkDao.getLinksByChatRequest(chatId);
 
         return new ListLinksResponse(list, (list == null) ? (0) : (list.length));
     }
 
-    public boolean addLink(int chatId, String link) {
+    @SuppressWarnings("ReturnCount")
+    public void addLink(Integer chatId, String link) throws IncorrectChatOperationRequest {
+        if (chatId == null || link == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
         Matcher matcher = gitHubPattern.matcher(link);
 
         if (matcher.find()) {
             GitHubResponse data = gitHubService.getGitHubInfo(matcher.group(1), matcher.group(2));
 
             linkDao.addLinkRequest(chatId, link, data.getCreationDate(), data.getLastUpdate());
-            return true;
+            return;
         }
 
         matcher = stackOverFlowPattern.matcher(link);
@@ -53,17 +61,29 @@ public class JdbcLinksService {
             StackOverFlowResponse data = stackOverFlowService.getStackOverFlowInfo(matcher.group(1));
 
             linkDao.addLinkRequest(chatId, link, data.getCreationDate(), data.getLastUpdate());
-            return true;
+            return;
         }
 
-        return false;
+        throw new IncorrectChatOperationRequest(incorrectRequestParams);
     }
 
     public Integer getLinkId(String link) {
         return linkDao.getLinkId(link);
     }
 
-    public void deleteLink(int chatId, int linkId) {
+    public void deleteLink(Integer chatId, String link) throws IncorrectChatOperationRequest,
+        DoesNotExistException {
+
+        if (chatId == null || link == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
+        Integer linkId = getLinkId(link);
+
+        if (linkId == null) {
+            throw new DoesNotExistException("Ссылка не найдена");
+        }
+
         linkDao.deleteLinkRequest(chatId, linkId);
     }
 }

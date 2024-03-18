@@ -19,11 +19,12 @@ public class HelpCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(), this.message());
+        return new SendMessage(update.message().chat().id(),
+            this.message(update.message().chat().id()));
     }
 
     @Override
-    public String message() {
+    public String message(long chatId) {
         return """
                 /start - зарегистрировать пользователя
                 /help - вывести окно с командами

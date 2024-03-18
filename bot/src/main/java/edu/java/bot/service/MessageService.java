@@ -2,13 +2,11 @@ package edu.java.bot.service;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Getter
 public class MessageService {
 
-    @Autowired
-    private LinkProcessor linkProcessor;
-
-    private final String unknownCommand = "Команда не распознана!";
+    private final LinkProcessor linkProcessor;
     private final List<Command> commands;
+    private final String unknownCommand = "Команда не распознана!";
     private final String emptyMessage = "Empty message!";
 
-    public String checkUpdate(Update update, TelegramBot bot) {
+    public void checkUpdate(Update update, TelegramBot bot) {
         if (update.message() == null) {
             log.error(emptyMessage);
-            return emptyMessage;
+            return;
         }
+
+        boolean isCommand = false;
 
         for (Command command: commands) {
             if (command.name().equals(update.message().text())) {
@@ -41,21 +39,13 @@ public class MessageService {
                     log.error("Incorrect SendMessage handler!", exception);
                 }
 
-                return command.message();
+                isCommand = true;
+                break;
             }
         }
 
-        if (linkProcessor.checkLink(update)) {
-            return "Ссылка обработана!";
+        if (!isCommand) {
+            linkProcessor.checkLink(update);
         }
-
-        try {
-            bot.execute(new SendMessage(update.message().chat().id(), unknownCommand));
-            log.info("Command was not recognized!");
-        } catch (Exception exception) {
-            log.error("Received Update hasn't enough information for sending message!", exception);
-        }
-
-        return unknownCommand;
     }
 }

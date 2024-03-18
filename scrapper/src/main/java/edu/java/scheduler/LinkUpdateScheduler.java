@@ -3,8 +3,8 @@ package edu.java.scheduler;
 import edu.java.clients.BotClient;
 import edu.java.response.api.LinkDataBaseInfo;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,24 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @EnableScheduling
+@RequiredArgsConstructor
 public class LinkUpdateScheduler {
 
-    @Autowired
-    private JdbcSchedulerService schedulerService;
-    @Autowired
-    private BotClient client;
+    private final JdbcSchedulerService schedulerService;
+    private final BotClient client;
 
     @Scheduled(fixedDelayString = "#{@schedulerInterval}")
     public void update() {
         LinkDataBaseInfo[] list;
 
-        try {
-            list = schedulerService.getOldLinks(2);
+        list = schedulerService.getOldLinks(2);
 
-            if (list == null) {
-                throw new Exception("");
-            }
-        } catch (Exception ex) {
+        if (list == null) {
             return;
         }
 
@@ -37,8 +32,12 @@ public class LinkUpdateScheduler {
 
         for (LinkDataBaseInfo linkInfo: list) {
             if (schedulerService.hadUpdated(linkInfo)) {
-                log.info(client.updateLink(linkInfo.getUrl(), Arrays.stream(linkInfo.getTgChatIds())
-                    .mapToInt(Integer::intValue).toArray()).block());
+                String response = client.updateLink(linkInfo.getUrl(),
+                    Arrays.stream(linkInfo.getTgChatIds())
+                    .mapToInt(Integer::intValue).toArray())
+                    .block();
+
+                log.info(response);
             }
         }
     }

@@ -2,9 +2,9 @@ package edu.java.jdbc;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
+import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.domain.JdbcChatRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcChatService {
 
-    @Autowired
-    private JdbcChatRepository jdbcChatRepository;
+    private final JdbcChatRepository jdbcChatRepository;
+    private final String incorrectRequestParams = "Некорректные параметры запроса";
 
-    public String addChat(long chatId) {
+    public String addChat(Long chatId) throws IncorrectChatOperationRequest {
+        if (chatId == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
         try {
             jdbcChatRepository.addChatRequest(chatId);
         } catch (ChatAlreadyExistsException ex) {
@@ -26,37 +30,41 @@ public class JdbcChatService {
         return "Чат зарегистрирован!";
     }
 
-    public boolean deleteChat(long chatId) {
+    public void deleteChat(Long chatId) throws IncorrectChatOperationRequest,
+        DoesNotExistException {
+
+        if (chatId == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
         try {
             jdbcChatRepository.deleteChatRequest(chatId);
         } catch (DoesNotExistException ex) {
-            return false;
+            throw new DoesNotExistException("Чат не существует");
         }
-
-        return true;
     }
 
-    public boolean isTrack(long chatId) {
+    public boolean isTrack(Long chatId) {
         return jdbcChatRepository.isWaitingTrack(chatId);
     }
 
-    public boolean isUntrack(long chatId) {
+    public boolean isUntrack(Long chatId) {
         return jdbcChatRepository.isWaitingUntrack(chatId);
     }
 
-    public void makeTrack(long chatId) {
+    public void makeTrack(Long chatId) {
         jdbcChatRepository.makeTrack(chatId);
     }
 
-    public void makeUntrack(long chatId) {
+    public void makeUntrack(Long chatId) {
         jdbcChatRepository.makeUntrack(chatId);
     }
 
-    public void deleteTrack(long chatId) {
+    public void deleteTrack(Long chatId) {
         jdbcChatRepository.deleteTrack(chatId);
     }
 
-    public void deleteUnrack(long chatId) {
+    public void deleteUnrack(Long chatId) {
         jdbcChatRepository.deleteUntrack(chatId);
     }
 }
