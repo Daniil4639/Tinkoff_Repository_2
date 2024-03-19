@@ -5,24 +5,21 @@ import edu.java.response.resource.github.GitHubResponse;
 import edu.java.response.resource.sof.StackOverFlowResponse;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
+import java.time.OffsetDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class JdbcSchedulerService {
 
-    @Autowired
-    private GitHubService gitHubService;
-    @Autowired
-    private StackOverFlowService stackOverFlowService;
-    @Autowired
-    private JdbcSchedulerDao schedulerDao;
+    private final GitHubService gitHubService;
+    private final StackOverFlowService stackOverFlowService;
+    private final JooqSchedulerDao schedulerDao;
 
     private final Pattern gitHubPattern =
         Pattern.compile("https://github.com/([a-zA-Z0-9-_.,]+)/([a-zA-Z0-9-_.,]+)");
@@ -30,7 +27,20 @@ public class JdbcSchedulerService {
         Pattern.compile("https://stackoverflow.com/questions/([0-9]+)");
 
     public LinkDataBaseInfo[] getOldLinks(int minutesAgo) {
-        return schedulerDao.getOldLinksRequest(minutesAgo);
+        OffsetDateTime nowTime = OffsetDateTime.now();
+        OffsetDateTime oldLinksTime = nowTime.minusMinutes(minutesAgo);
+
+        LinkDataBaseInfo[] list = schedulerDao.getOldLinksRequest(oldLinksTime);
+
+        for (LinkDataBaseInfo info: list) {
+            schedulerDao.addTgChatsInfo(info);
+        }
+
+        if (list.length != 0) {
+            schedulerDao.updateLastCheck(list, nowTime);
+        }
+
+        return list;
     }
 
     public Pair<Boolean, String> hadUpdated(LinkDataBaseInfo info) {

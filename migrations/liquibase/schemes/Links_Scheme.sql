@@ -1,4 +1,4 @@
-create table if not exists Links
+create table if not exists LINKS
 (
     id bigint generated always as identity,
     url text not null,

@@ -2,8 +2,8 @@ package edu.java.scrapper.db;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.domain.JdbcChatRepository;
-import edu.java.domain.JdbcLinkDao;
+import edu.java.domain.jdbc.JdbcChatRepository;
+import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.response.api.LinkResponse;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.OffsetDateTime;

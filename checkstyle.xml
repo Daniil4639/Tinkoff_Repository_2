@@ -11,13 +11,11 @@
     <property name="charset" value="UTF-8"/>
     <property name="fileExtensions" value="java, properties, xml"/>
 
-
     <!-- https://checkstyle.org/config_filefilters.html -->
     <!--     Excludes all 'module-info.java' files      -->
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
-
 
     <!-- https://checkstyle.org/config_javadoc.html#JavadocPackage     -->
     <!-- Checks that a package-info.java file exists for each package. -->
@@ -68,6 +66,9 @@
     <!--  Suppression with comments/annotation .    -->
     <module name="SuppressWithPlainTextCommentFilter"/>
     <module name="SuppressWarningsFilter"/>
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle-suppressions.xml"/>
+    </module>
 
 
     <module name="TreeWalker">

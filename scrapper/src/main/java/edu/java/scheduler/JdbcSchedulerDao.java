@@ -3,38 +3,37 @@ package edu.java.scheduler;
 import edu.java.response.api.LinkDataBaseInfo;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class JdbcSchedulerDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    public LinkDataBaseInfo[] getOldLinksRequest(int minutesAgo) {
-        LocalDateTime nowTime = LocalDateTime.now();
-        LocalDateTime oldLinksTime = nowTime.minusMinutes(minutesAgo);
-
-        LinkDataBaseInfo[] list =  jdbcTemplate.query(
-                "SELECT * FROM Links WHERE last_check <= '" + Timestamp.valueOf(oldLinksTime) + "'",
+    public LinkDataBaseInfo[] getOldLinksRequest(OffsetDateTime oldLinksTime) {
+        return jdbcTemplate.query(
+                "SELECT * FROM Links WHERE last_check <= ?",
                 (rs, rowNum) -> new LinkDataBaseInfo(rs.getInt("id"),
                     rs.getString("url"),
-                    createCorrectDate(rs.getTimestamp("updated_at")), null))
+                    createCorrectDate(rs.getTimestamp("updated_at")), null),
+                Timestamp.valueOf(oldLinksTime.toLocalDateTime()))
             .toArray(new LinkDataBaseInfo[]{});
+    }
 
-        for (LinkDataBaseInfo linkInfo: list) {
-            linkInfo.setTgChatIds(jdbcTemplate.query(
-                "SELECT * FROM Chat_Link_Connection WHERE "
-                    + "link_id=" + linkInfo.getId(), (rs, rowNum) -> rs.getInt("chat_id"))
-                .toArray(new Integer[] {}));
-        }
+    public void addTgChatsInfo(LinkDataBaseInfo linkInfo) {
+        linkInfo.setTgChatIds(jdbcTemplate.query(
+                "SELECT * FROM Chat_Link_Connection WHERE link_id=?",
+                (rs, rowNum) -> rs.getInt("chat_id"), linkInfo.getId())
+            .toArray(new Integer[] {}));
+    }
 
+    public void updateLastCheck(LinkDataBaseInfo[] list, OffsetDateTime nowTime) {
         StringBuilder idStr = new StringBuilder();
         for (int elem: Arrays.stream(list)
             .mapToInt(LinkDataBaseInfo::getId).toArray()) {
@@ -42,20 +41,18 @@ public class JdbcSchedulerDao {
             idStr.append(elem).append(", ");
         }
 
-        if (list.length != 0) {
-            jdbcTemplate.update("UPDATE Links SET last_check='" + Timestamp.valueOf(nowTime)
-                + "' WHERE id IN (" + idStr.delete(idStr.length() - 2, idStr.length() - 1) + ")");
-        }
-
-        return list;
-    }
-
-    private OffsetDateTime createCorrectDate(Timestamp date) {
-        return date.toLocalDateTime().atOffset(ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+        jdbcTemplate.update(String.format("UPDATE Links SET last_check=? WHERE id IN (%s)",
+                idStr.delete(idStr.length() - 2, idStr.length() - 1)),
+            Timestamp.valueOf(nowTime.toLocalDateTime()));
     }
 
     public void updateLinkDate(int linkId, OffsetDateTime newLastUpdateDate) {
         jdbcTemplate.update("UPDATE Links SET updated_at='"
             + Timestamp.valueOf(newLastUpdateDate.toLocalDateTime()) + "' WHERE id=" + linkId);
+    }
+
+    private OffsetDateTime createCorrectDate(Timestamp date) {
+        return date.toLocalDateTime().atOffset(ZoneId.systemDefault().getRules()
+            .getOffset(Instant.now()));
     }
 }

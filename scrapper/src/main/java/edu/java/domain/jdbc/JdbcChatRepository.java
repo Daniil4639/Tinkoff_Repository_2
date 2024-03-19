@@ -1,4 +1,4 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;

@@ -2,9 +2,9 @@ package edu.java.jdbc;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.domain.JdbcChatRepository;
+import edu.java.api_exceptions.IncorrectChatOperationRequest;
+import edu.java.domain.jooq.JooqChatRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcChatService {
 
-    @Autowired
-    private JdbcChatRepository jdbcChatRepository;
+    private final JooqChatRepository chatRepository;
+    private final String incorrectRequestParams = "Некорректные параметры запроса";
 
-    public String addChat(long chatId) {
+    public String addChat(Long chatId) throws IncorrectChatOperationRequest {
+        if (chatId == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        }
+
         try {
-            jdbcChatRepository.addChatRequest(chatId);
+            chatRepository.addChatRequest(chatId);
         } catch (ChatAlreadyExistsException ex) {
             return ex.getMessage();
         }
@@ -26,37 +30,41 @@ public class JdbcChatService {
         return "Чат зарегистрирован!";
     }
 
-    public boolean deleteChat(long chatId) {
-        try {
-            jdbcChatRepository.deleteChatRequest(chatId);
-        } catch (DoesNotExistException ex) {
-            return false;
+    public void deleteChat(Long chatId) throws IncorrectChatOperationRequest,
+        DoesNotExistException {
+
+        if (chatId == null) {
+            throw new IncorrectChatOperationRequest(incorrectRequestParams);
         }
 
-        return true;
+        try {
+            chatRepository.deleteChatRequest(chatId);
+        } catch (DoesNotExistException ex) {
+            throw new DoesNotExistException("Чат не существует");
+        }
     }
 
-    public boolean isTrack(long chatId) {
-        return jdbcChatRepository.isWaitingTrack(chatId);
+    public boolean isTrack(Long chatId) {
+        return chatRepository.isWaitingTrack(chatId);
     }
 
-    public boolean isUntrack(long chatId) {
-        return jdbcChatRepository.isWaitingUntrack(chatId);
+    public boolean isUntrack(Long chatId) {
+        return chatRepository.isWaitingUntrack(chatId);
     }
 
-    public void makeTrack(long chatId) {
-        jdbcChatRepository.makeTrack(chatId);
+    public void makeTrack(Long chatId) {
+        chatRepository.makeTrack(chatId);
     }
 
-    public void makeUntrack(long chatId) {
-        jdbcChatRepository.makeUntrack(chatId);
+    public void makeUntrack(Long chatId) {
+        chatRepository.makeUntrack(chatId);
     }
 
-    public void deleteTrack(long chatId) {
-        jdbcChatRepository.deleteTrack(chatId);
+    public void deleteTrack(Long chatId) {
+        chatRepository.deleteTrack(chatId);
     }
 
-    public void deleteUnrack(long chatId) {
-        jdbcChatRepository.deleteUntrack(chatId);
+    public void deleteUnrack(Long chatId) {
+        chatRepository.deleteUntrack(chatId);
     }
 }
