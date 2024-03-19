@@ -23,7 +23,7 @@ public class LinkUpdateScheduler {
     public void update() {
         LinkDataBaseInfo[] list;
 
-        list = schedulerService.getOldLinks(1);
+        list = schedulerService.getOldLinks(2);
 
         if (list == null) {
             return;

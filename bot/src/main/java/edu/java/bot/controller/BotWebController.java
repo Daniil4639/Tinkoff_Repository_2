@@ -8,8 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,23 +17,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/updates")
 public class BotWebController {
 
-    @Autowired
-    private MessageService service;
+    private final MessageService service;
 
     @Operation(summary = "Отправить обновление")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Обновление обработано",
-                     content = {@Content(mediaType = "application/json",
-                                         schema = @Schema(implementation
-                                             = String.class))}),
-        @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса",
-                     content = {@Content(mediaType = "application/json",
-                                         schema = @Schema(implementation
-                                             = ApiErrorResponse.class))})
-    })
+    @ApiResponse(responseCode = "200",
+                 content = {@Content(mediaType = "application/json",
+                                     schema = @Schema(implementation = String.class))})
+    @ApiResponse(responseCode = "400",
+                 content = {@Content(mediaType = "application/json",
+                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public String sendUpdates(@RequestBody LinkUpdateRequest request) throws IncorrectUpdateRequest {
