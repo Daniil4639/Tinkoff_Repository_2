@@ -28,7 +28,6 @@ public class LinkUpdateScheduler {
         if (list == null) {
             return;
         }
-
         log.info("Ссылок давно не обновлялось: " + list.length);
 
         for (LinkDataBaseInfo linkInfo: list) {
