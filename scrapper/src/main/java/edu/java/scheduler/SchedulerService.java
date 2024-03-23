@@ -3,6 +3,7 @@ package edu.java.scheduler;
 import edu.java.response.api.LinkDataBaseInfo;
 import edu.java.response.resource.github.GitHubResponse;
 import edu.java.response.resource.sof.StackOverFlowResponse;
+import edu.java.scheduler.daos.SchedulerDao;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
 import java.time.OffsetDateTime;
@@ -11,15 +12,15 @@ import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Transactional
 @RequiredArgsConstructor
-public class JdbcSchedulerService {
+public class SchedulerService {
 
     private final GitHubService gitHubService;
     private final StackOverFlowService stackOverFlowService;
-    private final JooqSchedulerDao schedulerDao;
+    private final SchedulerDao schedulerDao;
 
     private final Pattern gitHubPattern =
         Pattern.compile("https://github.com/([a-zA-Z0-9-_.,]+)/([a-zA-Z0-9-_.,]+)");
@@ -62,7 +63,7 @@ public class JdbcSchedulerService {
     private Pair<Boolean, String> updateByGit(LinkDataBaseInfo info, Matcher matcher) {
         GitHubResponse data = gitHubService.getGitHubInfo(matcher.group(1), matcher.group(2));
 
-        boolean hadUpdate =  !data.getLastUpdate().equals(info.getLastUpdate());
+        boolean hadUpdate = !data.getLastUpdate().equals(info.getLastUpdate());
         if (!hadUpdate) {
             return new ImmutablePair<>(false, null);
         }

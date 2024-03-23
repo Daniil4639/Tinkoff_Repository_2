@@ -1,4 +1,4 @@
-package edu.java.scheduler;
+package edu.java.scheduler.daos;
 
 import edu.java.response.api.LinkDataBaseInfo;
 import java.sql.Timestamp;
@@ -9,13 +9,16 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
-public class JdbcSchedulerDao {
+public class JdbcSchedulerDao implements SchedulerDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Override
     public LinkDataBaseInfo[] getOldLinksRequest(OffsetDateTime oldLinksTime) {
         return jdbcTemplate.query(
                 "SELECT * FROM Links WHERE last_check <= ?",
@@ -26,6 +29,7 @@ public class JdbcSchedulerDao {
             .toArray(new LinkDataBaseInfo[]{});
     }
 
+    @Override
     public void addTgChatsInfo(LinkDataBaseInfo linkInfo) {
         linkInfo.setTgChatIds(jdbcTemplate.query(
                 "SELECT * FROM Chat_Link_Connection WHERE link_id=?",
@@ -33,6 +37,7 @@ public class JdbcSchedulerDao {
             .toArray(new Integer[] {}));
     }
 
+    @Override
     public void updateLastCheck(LinkDataBaseInfo[] list, OffsetDateTime nowTime) {
         StringBuilder idStr = new StringBuilder();
         for (int elem: Arrays.stream(list)
@@ -46,6 +51,7 @@ public class JdbcSchedulerDao {
             Timestamp.valueOf(nowTime.toLocalDateTime()));
     }
 
+    @Override
     public void updateLinkDate(int linkId, OffsetDateTime newLastUpdateDate) {
         jdbcTemplate.update("UPDATE Links SET updated_at='"
             + Timestamp.valueOf(newLastUpdateDate.toLocalDateTime()) + "' WHERE id=" + linkId);

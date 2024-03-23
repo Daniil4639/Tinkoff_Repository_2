@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LinkUpdateScheduler {
 
-    private final JdbcSchedulerService schedulerService;
+    private final SchedulerService schedulerService;
     private final BotClient client;
 
     @Scheduled(fixedDelayString = "#{@schedulerInterval}")

@@ -1,24 +1,26 @@
 package edu.java.domain.jdbc;
 
+import edu.java.domain.interfaces.LinkDao;
 import edu.java.response.api.LinkResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Setter
-public class JdbcLinkDao {
+@Transactional
+@RequiredArgsConstructor
+public class JdbcLinkDao implements LinkDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    public LinkResponse[] getLinksByChatRequest(int chatId) {
+    @Override
+    public LinkResponse[] getLinksByChatRequest(long chatId) {
         List<Integer> idList = jdbcTemplate.query("SELECT * FROM Chat_Link_Connection WHERE "
             + "chat_id=" + chatId, (rs, rowNum) -> rs.getInt("link_id"));
 
@@ -35,7 +37,8 @@ public class JdbcLinkDao {
             .toArray(new LinkResponse[]{});
     }
 
-    public void addLinkRequest(int chatId, String link, OffsetDateTime createdDate,
+    @Override
+    public void addLinkRequest(long chatId, String link, OffsetDateTime createdDate,
         OffsetDateTime updatedDate) {
 
         Integer count = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chats WHERE chat_id=?",
@@ -57,12 +60,14 @@ public class JdbcLinkDao {
             + " url='" + link + "')) ON CONFLICT DO NOTHING");
     }
 
-    public Integer getLinkId(String link) {
+    @Override
+    public Long getLinkId(String link) {
         return jdbcTemplate.queryForObject("SELECT id FROM Links WHERE url='" + link + "'",
-            Integer.class);
+            Long.class);
     }
 
-    public void deleteLinkRequest(int chatId, int linkId) {
+    @Override
+    public void deleteLinkRequest(long chatId, long linkId) {
         jdbcTemplate.update("DELETE FROM Chat_Link_Connection WHERE chat_id=" + chatId + " AND link_id"
             + "= " + linkId);
 

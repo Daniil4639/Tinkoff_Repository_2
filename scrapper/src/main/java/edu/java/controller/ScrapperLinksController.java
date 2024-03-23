@@ -2,7 +2,7 @@ package edu.java.controller;
 
 import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.api_exceptions.IncorrectChatOperationRequest;
-import edu.java.jdbc.JdbcLinksService;
+import edu.java.db_services.LinksService;
 import edu.java.requests.api.AddLinkRequest;
 import edu.java.requests.api.RemoveLinkRequest;
 import edu.java.response.api.ApiErrorResponse;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ScrapperLinksController {
 
-    private final JdbcLinksService linksService;
+    private final LinksService linksService;
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponse(responseCode = "200", description = "Ссылки успешно получены")

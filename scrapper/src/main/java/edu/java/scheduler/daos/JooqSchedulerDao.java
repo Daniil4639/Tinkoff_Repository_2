@@ -1,4 +1,4 @@
-package edu.java.scheduler;
+package edu.java.scheduler.daos;
 
 import edu.java.response.api.LinkDataBaseInfo;
 import edu.jooq.tables.ChatLinkConnection;
@@ -9,13 +9,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
-public class JooqSchedulerDao {
+public class JooqSchedulerDao implements SchedulerDao {
 
     private final DSLContext jooqContext;
 
+    @Override
     public LinkDataBaseInfo[] getOldLinksRequest(OffsetDateTime oldLinksTime) {
         return jooqContext.select(Links.LINKS.ID, Links.LINKS.URL, Links.LINKS.UPDATED_AT)
             .from(Links.LINKS)
@@ -25,6 +28,7 @@ public class JooqSchedulerDao {
             .toArray(new LinkDataBaseInfo[] {});
     }
 
+    @Override
     public void addTgChatsInfo(LinkDataBaseInfo linkInfo) {
         linkInfo.setTgChatIds(jooqContext.select(ChatLinkConnection.CHAT_LINK_CONNECTION.CHAT_ID)
             .from(ChatLinkConnection.CHAT_LINK_CONNECTION)
@@ -33,6 +37,7 @@ public class JooqSchedulerDao {
             .toArray(new Integer[] {}));
     }
 
+    @Override
     public void updateLastCheck(LinkDataBaseInfo[] list, OffsetDateTime nowTime) {
         List<Integer> ids = Arrays.stream(list)
             .map(LinkDataBaseInfo::getId)
@@ -44,6 +49,7 @@ public class JooqSchedulerDao {
             .execute();
     }
 
+    @Override
     public void updateLinkDate(int linkId, OffsetDateTime newLastUpdateDate) {
         jooqContext.update(Links.LINKS)
             .set(Links.LINKS.UPDATED_AT, newLastUpdateDate)

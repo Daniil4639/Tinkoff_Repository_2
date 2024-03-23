@@ -1,19 +1,17 @@
-package edu.java.jdbc;
+package edu.java.db_services;
 
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.api_exceptions.IncorrectChatOperationRequest;
-import edu.java.domain.jooq.JooqChatRepository;
+import edu.java.domain.interfaces.ChatRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @Transactional
 @RequiredArgsConstructor
-public class JdbcChatService {
+public class ChatService {
 
-    private final JooqChatRepository chatRepository;
+    private final ChatRepository chatRepository;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
     public String addChat(Long chatId) throws IncorrectChatOperationRequest {
