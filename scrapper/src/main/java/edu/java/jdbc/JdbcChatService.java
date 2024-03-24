@@ -1,9 +1,9 @@
 package edu.java.jdbc;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.domain.JdbcChatRepository;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.exceptions.IncorrectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +16,9 @@ public class JdbcChatService {
     private final JdbcChatRepository jdbcChatRepository;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
-    public String addChat(Long chatId) throws IncorrectChatOperationRequest {
+    public String addChat(Long chatId) throws IncorrectRequest {
         if (chatId == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         try {
@@ -30,11 +30,11 @@ public class JdbcChatService {
         return "Чат зарегистрирован!";
     }
 
-    public void deleteChat(Long chatId) throws IncorrectChatOperationRequest,
+    public void deleteChat(Long chatId) throws IncorrectRequest,
         DoesNotExistException {
 
         if (chatId == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         try {

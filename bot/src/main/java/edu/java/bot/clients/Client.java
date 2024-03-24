@@ -7,8 +7,6 @@ public abstract class Client {
     protected final WebClient client;
 
     public Client(String url) {
-        client = WebClient.builder()
-            .baseUrl(url)
-            .build();
+        client = WebClient.create(url);
     }
 }

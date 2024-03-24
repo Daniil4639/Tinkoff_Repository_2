@@ -1,4 +1,4 @@
-package edu.java.response.resource;
+package edu.java.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

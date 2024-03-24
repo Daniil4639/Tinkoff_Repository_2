@@ -1,11 +1,12 @@
 package edu.java.bot.clients;
 
-import edu.java.bot.api_exceptions.BadRequestException;
-import edu.java.bot.api_exceptions.NotFoundException;
-import edu.java.bot.requests.AddLinkRequest;
-import edu.java.bot.requests.RemoveLinkRequest;
-import edu.java.bot.responses.LinkResponse;
-import edu.java.bot.responses.ListLinksResponse;
+import edu.java.exceptions.BadRequestException;
+import edu.java.exceptions.NotFoundException;
+import edu.java.requests.AddLinkRequest;
+import edu.java.requests.RemoveLinkRequest;
+import edu.java.responses.BotApiError;
+import edu.java.responses.LinkResponse;
+import edu.java.responses.LinkResponseList;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
@@ -28,7 +29,9 @@ public class ScrapperClient extends Client {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new BadRequestException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
             .bodyToMono(String.class);
     }
@@ -39,16 +42,20 @@ public class ScrapperClient extends Client {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new BadRequestException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
-                response -> Mono.error(new NotFoundException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
             .bodyToMono(String.class);
     }
 
-    public Mono<ListLinksResponse> getLinks(long id) {
+    public Mono<LinkResponseList> getLinks(long id) {
         return client.get()
             .uri(uriBuilder -> uriBuilder
                 .path(linksPath)
@@ -57,45 +64,46 @@ public class ScrapperClient extends Client {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new BadRequestException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
-            .bodyToMono(ListLinksResponse.class);
+            .bodyToMono(LinkResponseList.class);
     }
 
     public Mono<LinkResponse> addLink(String link, long id) {
-        AddLinkRequest request = new AddLinkRequest(link);
-
         return client.post()
             .uri(uriBuilder -> uriBuilder
                 .path(linksPath)
                 .queryParam(tgChatIdParam, id)
                 .build())
-            .body(Mono.just(request), AddLinkRequest.class)
+            .bodyValue(new AddLinkRequest(link))
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new BadRequestException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
             .bodyToMono(LinkResponse.class);
     }
 
     public Mono<LinkResponse> deleteLink(String link, long id) {
-        RemoveLinkRequest request = new RemoveLinkRequest(link);
-
         return client.method(HttpMethod.DELETE)
-            .uri(uriBuilder -> uriBuilder
-                .path(linksPath)
-                .queryParam(tgChatIdParam, id)
-                .build())
-            .body(Mono.just(request), AddLinkRequest.class)
+            .uri(linksPath)
+            .bodyValue(new RemoveLinkRequest(link))
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                response -> Mono.error(new BadRequestException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
-                response -> Mono.error(new NotFoundException(response))
+                response -> response.bodyToMono(BotApiError.class)
+                    .map(BotApiError::getExceptionMessage)
+                    .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
             .bodyToMono(LinkResponse.class);
     }

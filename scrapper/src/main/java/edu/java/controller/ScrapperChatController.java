@@ -1,9 +1,9 @@
 package edu.java.controller;
 
-import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.api_exceptions.IncorrectChatOperationRequest;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.exceptions.IncorrectRequest;
 import edu.java.jdbc.JdbcChatService;
-import edu.java.response.api.ApiErrorResponse;
+import edu.java.responses.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +27,8 @@ public class ScrapperChatController {
 
     private final static String ID_MAPPING = "/{id}";
 
+    private final static String INCORRECT_REQUEST_PARAMS = "Некорректные параметры запроса";
+
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponse(responseCode = "200", description = "Чат зарегистрирован")
     @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса",
@@ -34,7 +36,7 @@ public class ScrapperChatController {
     @PostMapping(ID_MAPPING)
     @ResponseStatus(HttpStatus.OK)
     public String chatRegistration(@PathVariable Long id) throws
-        IncorrectChatOperationRequest {
+        IncorrectRequest {
 
         return chatService.addChat(id);
     }
@@ -48,9 +50,10 @@ public class ScrapperChatController {
     @DeleteMapping(ID_MAPPING)
     @ResponseStatus(HttpStatus.OK)
     public String chatDelete(@PathVariable Long id) throws
-        IncorrectChatOperationRequest, DoesNotExistException {
+        IncorrectRequest, DoesNotExistException {
 
         chatService.deleteChat(id);
+
         return "Чат успешно удалён";
     }
 

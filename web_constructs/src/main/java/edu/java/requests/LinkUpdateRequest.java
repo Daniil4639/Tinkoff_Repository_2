@@ -1,21 +1,14 @@
-package edu.java.requests.api;
+package edu.java.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-/* Request example
-    {
-    "id": 2,
-    "url": "smth",
-    "description": "smth",
-    "tgChatIds": [2,4,5]
-    }
-*/
 
 @Getter
 @Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class LinkUpdateRequest {
 
     private Integer id;

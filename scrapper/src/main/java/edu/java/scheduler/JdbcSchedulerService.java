@@ -1,8 +1,8 @@
 package edu.java.scheduler;
 
-import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.resource.GitHubResponse;
-import edu.java.response.resource.StackOverFlowResponse;
+import edu.java.response.GitHubResponse;
+import edu.java.response.StackOverFlowResponse;
+import edu.java.responses.LinkDataBaseInfo;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
 import java.time.LocalDateTime;

@@ -1,12 +1,12 @@
 package edu.java.jdbc;
 
-import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.domain.JdbcLinkDao;
-import edu.java.response.api.LinkResponse;
-import edu.java.response.api.ListLinksResponse;
-import edu.java.response.resource.GitHubResponse;
-import edu.java.response.resource.StackOverFlowResponse;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.exceptions.IncorrectRequest;
+import edu.java.response.GitHubResponse;
+import edu.java.response.StackOverFlowResponse;
+import edu.java.responses.LinkResponse;
+import edu.java.responses.LinkResponseList;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
 import java.util.regex.Matcher;
@@ -30,20 +30,20 @@ public class JdbcLinksService {
     private final Pattern stackOverFlowPattern =
         Pattern.compile("https://stackoverflow.com/questions/([0-9]+)");
 
-    public ListLinksResponse getLinksByChat(Integer chatId) throws IncorrectChatOperationRequest {
+    public LinkResponseList getLinksByChat(Integer chatId) throws IncorrectRequest {
         if (chatId == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         LinkResponse[] list = linkDao.getLinksByChatRequest(chatId);
 
-        return new ListLinksResponse(list, (list == null) ? (0) : (list.length));
+        return new LinkResponseList(list, (list == null) ? (0) : (list.length));
     }
 
     @SuppressWarnings("ReturnCount")
-    public void addLink(Integer chatId, String link) throws IncorrectChatOperationRequest {
+    public void addLink(Integer chatId, String link) throws IncorrectRequest {
         if (chatId == null || link == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         Matcher matcher = gitHubPattern.matcher(link);
@@ -64,18 +64,18 @@ public class JdbcLinksService {
             return;
         }
 
-        throw new IncorrectChatOperationRequest(incorrectRequestParams);
+        throw new IncorrectRequest(incorrectRequestParams);
     }
 
     public Integer getLinkId(String link) {
         return linkDao.getLinkId(link);
     }
 
-    public void deleteLink(Integer chatId, String link) throws IncorrectChatOperationRequest,
+    public void deleteLink(Integer chatId, String link) throws IncorrectRequest,
         DoesNotExistException {
 
         if (chatId == null || link == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         Integer linkId = getLinkId(link);

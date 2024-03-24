@@ -1,7 +1,7 @@
 package edu.java.service;
 
 import edu.java.clients.StackOverflowClient;
-import edu.java.response.resource.StackOverFlowResponse;
+import edu.java.response.StackOverFlowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

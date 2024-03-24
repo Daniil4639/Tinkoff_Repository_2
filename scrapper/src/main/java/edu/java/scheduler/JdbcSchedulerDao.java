@@ -1,6 +1,6 @@
 package edu.java.scheduler;
 
-import edu.java.response.api.LinkDataBaseInfo;
+import edu.java.responses.LinkDataBaseInfo;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

@@ -1,17 +1,15 @@
 package edu.java.scrapper.db;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.domain.JdbcChatRepository;
 import edu.java.domain.JdbcLinkDao;
-import edu.java.response.api.LinkResponse;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.responses.LinkResponse;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.OffsetDateTime;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

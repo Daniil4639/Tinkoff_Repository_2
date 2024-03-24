@@ -3,7 +3,7 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperClient;
-import edu.java.bot.responses.ListLinksResponse;
+import edu.java.responses.LinkResponseList;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class ListCommand implements Command {
 
     @Override
     public String message(long chatId) {
-        ListLinksResponse list = client.getLinks(chatId).block();
+        LinkResponseList list = client.getLinks(chatId).block();
         StringBuilder result = new StringBuilder();
 
         if (list == null || list.getSize() == 0) {

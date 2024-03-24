@@ -1,6 +1,6 @@
 package edu.java.domain;
 
-import edu.java.response.api.LinkResponse;
+import edu.java.responses.LinkResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;

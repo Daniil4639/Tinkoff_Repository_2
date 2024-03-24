@@ -1,7 +1,7 @@
 package edu.java.domain;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
