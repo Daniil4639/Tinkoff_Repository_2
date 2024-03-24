@@ -90,7 +90,10 @@ public class ScrapperClient extends Client {
 
     public Mono<LinkResponse> deleteLink(String link, long id) {
         return client.method(HttpMethod.DELETE)
-            .uri(linksPath)
+            .uri(uriBuilder -> uriBuilder
+                .path(linksPath)
+                .queryParam(tgChatIdParam, id)
+                .build())
             .bodyValue(new RemoveLinkRequest(link))
             .retrieve()
             .onStatus(

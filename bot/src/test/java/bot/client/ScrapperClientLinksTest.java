@@ -114,7 +114,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void deleteLinkSuccessTest() {
-        stubFor(delete(urlEqualTo("/links"))
+        stubFor(delete(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_OK)
                 .withHeader("Content-Type", "application/json")
@@ -130,7 +130,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void deleteLinkBadRequestTest() {
-        stubFor(delete(urlEqualTo("/links"))
+        stubFor(delete(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_BAD_REQUEST)
                 .withHeader("Content-Type", "application/json")
@@ -146,7 +146,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void deleteLinkNotFoundTest() {
-        stubFor(delete(urlEqualTo("/links"))
+        stubFor(delete(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_NOT_FOUND)
                 .withHeader("Content-Type", "application/json")
