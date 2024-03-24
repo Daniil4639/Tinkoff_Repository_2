@@ -5,7 +5,6 @@ import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -13,6 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ScrapperClientLinksTest extends AbstractClientTest {
@@ -50,13 +50,13 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void getLinksSuccessTest() {
-        stubFor(get(urlEqualTo("/links"))
+        stubFor(get(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_OK)
                 .withHeader("Content-Type", "application/json")
                 .withBody(GET_LINKS_RESPONSE)));
 
-        StepVerifier.create(client.getLinks())
+        StepVerifier.create(client.getLinks(12))
             .expectNextMatches(response -> {
                 assertThat(response.getLinks()).isNull();
                 return true;
@@ -66,13 +66,13 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void getLinksBadRequestTest() {
-        stubFor(get(urlEqualTo("/links"))
+        stubFor(get(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_BAD_REQUEST)
                 .withHeader("Content-Type", "application/json")
                 .withBody(INCORRECT_RESPONSE_BODY)));
 
-        StepVerifier.create(client.getLinks())
+        StepVerifier.create(client.getLinks(12))
             .expectErrorMatches(throwable -> {
                 assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
@@ -82,13 +82,13 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void addLinkSuccessTest() {
-        stubFor(post(urlEqualTo("/links"))
+        stubFor(post(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_OK)
                 .withHeader("Content-Type", "application/json")
                 .withBody(LINK_RESPONSE)));
 
-        StepVerifier.create(client.addLink("testLink"))
+        StepVerifier.create(client.addLink("testLink", 12))
             .expectNextMatches(response -> {
                 assertThat(response.getUrl()).isEqualTo("testLink");
                 return true;
@@ -98,13 +98,13 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
     @Test
     public void addLinkBadRequestTest() {
-        stubFor(post(urlEqualTo("/links"))
+        stubFor(post(urlPathMatching("/links.*"))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.SC_BAD_REQUEST)
                 .withHeader("Content-Type", "application/json")
                 .withBody(INCORRECT_RESPONSE_BODY)));
 
-        StepVerifier.create(client.addLink("testLink"))
+        StepVerifier.create(client.addLink("testLink", 12))
             .expectErrorMatches(throwable -> {
                 assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
@@ -120,7 +120,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(LINK_RESPONSE)));
 
-        StepVerifier.create(client.deleteLink("testLink"))
+        StepVerifier.create(client.deleteLink("testLink", 12))
             .expectNextMatches(response -> {
                 assertThat(response.getUrl()).isEqualTo("testLink");
                 return true;
@@ -136,7 +136,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(INCORRECT_RESPONSE_BODY)));
 
-        StepVerifier.create(client.deleteLink("testLink"))
+        StepVerifier.create(client.deleteLink("testLink", 12))
             .expectErrorMatches(throwable -> {
                 assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
@@ -152,7 +152,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(NOT_FOUND_RESPONSE_BODY)));
 
-        StepVerifier.create(client.deleteLink("testLink"))
+        StepVerifier.create(client.deleteLink("testLink", 12))
             .expectErrorMatches(throwable -> {
                 assertThat(((NotFoundException)throwable).message).isEqualTo(NOT_FOUND_RESPONSE);
                 return true;

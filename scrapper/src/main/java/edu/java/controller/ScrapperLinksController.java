@@ -2,6 +2,7 @@ package edu.java.controller;
 
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.exceptions.IncorrectRequest;
+import edu.java.jdbc.JdbcLinksService;
 import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/links")
+@RequiredArgsConstructor
 public class ScrapperLinksController {
 
-    private final static String INCORRECT_REQUEST_PARAMS = "Некорректные параметры запроса";
+    private final JdbcLinksService linksService;
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponse(responseCode = "200", description = "Ссылки успешно получены")
@@ -36,11 +39,7 @@ public class ScrapperLinksController {
     public LinkResponseList getLinks(@RequestParam Integer tgChatId) throws
         IncorrectRequest {
 
-        if (tgChatId == null) {
-            throw new IncorrectRequest(INCORRECT_REQUEST_PARAMS);
-        }
-
-        return new LinkResponseList(null, 0);
+        return linksService.getLinksByChat(tgChatId);
     }
 
     @Operation(summary = "Добавить отслеживание ссылки")
@@ -52,9 +51,7 @@ public class ScrapperLinksController {
     public LinkResponse trackLink(@RequestParam Integer tgChatId,
         @RequestBody AddLinkRequest request) throws IncorrectRequest {
 
-        if (tgChatId == null || request.getLink() == null) {
-            throw new IncorrectRequest(INCORRECT_REQUEST_PARAMS);
-        }
+        linksService.addLink(tgChatId, request.getLink());
 
         return new LinkResponse(tgChatId, request.getLink());
     }
@@ -68,16 +65,10 @@ public class ScrapperLinksController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public LinkResponse untrackLink(@RequestParam Integer tgChatId,
-        @RequestBody RemoveLinkRequest request) throws IncorrectRequest, DoesNotExistException {
+        @RequestBody RemoveLinkRequest request) throws IncorrectRequest,
+        DoesNotExistException {
 
-        if (tgChatId == null || request.getLink() == null) {
-            throw new IncorrectRequest(INCORRECT_REQUEST_PARAMS);
-        }
-
-        if (false) {
-            throw new DoesNotExistException("Ссылка не найдена");
-        }
-
+        linksService.deleteLink(tgChatId, request.getLink());
         return new LinkResponse(tgChatId, request.getLink());
     }
 }
