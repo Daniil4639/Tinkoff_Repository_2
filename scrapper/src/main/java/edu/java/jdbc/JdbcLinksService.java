@@ -37,7 +37,9 @@ public class JdbcLinksService {
 
         LinkResponse[] list = linkDao.getLinksByChatRequest(chatId);
 
-        return new ListLinksResponse(list, (list == null) ? (0) : (list.length));
+        list = (list == null) ? (new LinkResponse[0]) : (list);
+
+        return new ListLinksResponse(list, list.length);
     }
 
     @SuppressWarnings("ReturnCount")

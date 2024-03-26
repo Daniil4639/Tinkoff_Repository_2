@@ -8,32 +8,31 @@ import edu.java.response.resource.github.GitHubResponse;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.http.MediaType;
 
 public class GitHubClient extends Client {
+
+    private final ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(Instant.now());
 
     public GitHubClient(String baseUrl) {
         super(baseUrl);
     }
 
     public GitHubResponse getInfo(String user, String repos) {
-        GitHubResponse response = client.get()
+        Optional<GitHubResponse> response = client.get()
             .uri("/repos/{user}/{repos}", user, repos)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(GitHubResponse.class)
             .log()
-            .block();
+            .blockOptional();
 
-        if (response == null) {
-            return null;
-        }
+        response.ifPresent(value -> value.setLastUpdate(value.getLastUpdate().toLocalDateTime().atOffset(offset)));
 
-        response.setLastUpdate(response.getLastUpdate().toLocalDateTime().atOffset(ZoneId.systemDefault().getRules()
-            .getOffset(Instant.now())));
-
-        return response;
+        return response.orElse(null);
     }
 
     public GitHubExtendedResponse getExtendedInfo(String user, String repos,
@@ -45,7 +44,7 @@ public class GitHubClient extends Client {
 
         for (BranchDto branch: branches) {
             List<CommitDto> commits = getCommitsByBranch(
-                "/repos/" + user + "/" + repos + "/commits?sha=" + branch.getCommit().getSha(),
+                String.format("/repos/%s/%s/commits?sha=%s", user, repos, branch.getCommit().getSha()),
                 lastUpdate);
 
             if (commits == null || commits.isEmpty()) {
@@ -83,12 +82,10 @@ public class GitHubClient extends Client {
             return null;
         }
 
-        for (CommitExtendedDto commitExtendedDto : commitsList) {
-            commitExtendedDto.getCommit().getAuthor().setDate(
-                    commitExtendedDto.getCommit().getAuthor().getDate().toLocalDateTime()
-                            .atOffset(ZoneId.systemDefault().getRules()
-                                    .getOffset(Instant.now())));
-        }
+        commitsList.stream()
+            .map(CommitExtendedDto::getCommit)
+            .map(CommitDto::getAuthor)
+            .forEach(author -> author.setDate(author.getDate().toLocalDateTime().atOffset(offset)));
 
         return commitsList.stream()
             .map(CommitExtendedDto::getCommit)

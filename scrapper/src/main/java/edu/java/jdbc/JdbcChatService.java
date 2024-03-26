@@ -3,7 +3,7 @@ package edu.java.jdbc;
 import edu.java.api_exceptions.ChatAlreadyExistsException;
 import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.api_exceptions.IncorrectChatOperationRequest;
-import edu.java.domain.jooq.JooqChatRepository;
+import edu.java.domain.jdbc.JdbcChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcChatService {
 
-    private final JooqChatRepository chatRepository;
+    private final JdbcChatRepository chatRepository;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
     public String addChat(Long chatId) throws IncorrectChatOperationRequest {

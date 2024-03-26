@@ -3,3 +3,5 @@ app:
     bot-base-url: http://localhost:1234
     github-base-url: http://localhost:1234
     stackoverflow-base-url: http://localhost:1234
+  scheduler:
+    enable: false
