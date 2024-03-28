@@ -43,6 +43,6 @@ public class StackOverFlowServiceTest extends AbstractClientTest {
         assertThat(response.getQuestionName()).isEqualTo("test_question");
         assertThat(response.getQuestionLink()).isEqualTo("https://stackoverflow.com/questions/2024/test_question");
         assertThat(response.getCreationDate().toString()).isEqualTo("2018-03-22T07:33:02Z");
-        assertThat(response.getLastUpdate().toString()).isEqualTo("2019-11-21T11:03:18Z");
+        assertThat(response.getLastUpdate().toString()).isEqualTo("2019-11-21T11:03:18+03:00");
     }
 }

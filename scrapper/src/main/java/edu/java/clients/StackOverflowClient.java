@@ -25,6 +25,7 @@ public class StackOverflowClient extends Client {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(StackOverFlowResponseItems.class)
+                .retryWhen(retry)
             .log()
             .block())
             .getResponseList()
@@ -55,6 +56,7 @@ public class StackOverflowClient extends Client {
                         .accept(MediaType.APPLICATION_JSON)
                         .retrieve()
                         .bodyToMono(StackOverFlowAnswersItems.class)
+                .retryWhen(retry)
                         .block())
             .getAnswers();
     }

@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.configuration.retryWebClient.RetryType;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,6 +12,9 @@ public record ApplicationConfig(
 
     @NotNull
     AccessType databaseAccessType,
+
+    @NotNull
+    RetryType retryType,
 
     @NotNull
     ApiConfig api,

@@ -19,7 +19,7 @@ public class GitHubServiceTest extends AbstractClientTest {
             "name": "test_repos",
             "html_url": "https://github.com/test_user/test_repos",
             "created_at": "2024-02-07T09:58:39Z",
-            "updated_at": "2024-02-07T10:00:21Z"
+            "pushed_at": "2024-02-07T10:00:21Z"
         }
         """;
 
@@ -40,6 +40,6 @@ public class GitHubServiceTest extends AbstractClientTest {
         assertThat(response.getReposName()).isEqualTo("test_repos");
         assertThat(response.getReposLink()).isEqualTo("https://github.com/test_user/test_repos");
         assertThat(response.getCreationDate().toString()).isEqualTo("2024-02-07T09:58:39Z");
-        assertThat(response.getLastUpdate().toString()).isEqualTo("2024-02-07T10:00:21Z");
+        assertThat(response.getLastUpdate().toString()).isEqualTo("2024-02-07T10:00:21+03:00");
     }
 }

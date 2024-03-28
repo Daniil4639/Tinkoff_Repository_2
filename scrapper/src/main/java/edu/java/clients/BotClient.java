@@ -23,6 +23,7 @@ public class BotClient extends Client {
                 HttpStatus.BAD_REQUEST::equals,
                 response -> Mono.error(new BadRequestException(response))
             )
-            .bodyToMono(String.class);
+            .bodyToMono(String.class)
+            .retryWhen(retry);
     }
 }
