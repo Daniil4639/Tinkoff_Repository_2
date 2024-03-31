@@ -1,9 +1,9 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.api_exceptions.IncorrectUpdateRequest;
-import edu.java.bot.requests.LinkUpdateRequest;
-import edu.java.bot.responses.ApiErrorResponse;
 import edu.java.bot.service.MessageService;
+import edu.java.exceptions.IncorrectRequest;
+import edu.java.requests.LinkUpdateRequest;
+import edu.java.responses.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,17 +24,16 @@ public class BotWebController {
     private final MessageService service;
 
     @Operation(summary = "Отправить обновление")
-    @ApiResponse(responseCode = "200",
-                 content = {@Content(mediaType = "application/json",
-                                     schema = @Schema(implementation = String.class))})
-    @ApiResponse(responseCode = "400",
-                 content = {@Content(mediaType = "application/json",
-                                     schema = @Schema(implementation = ApiErrorResponse.class))})
+    @ApiResponse(responseCode = "200", description = "Обновление обработано")
+    @ApiResponse(
+        responseCode = "400", description = "Некорректные параметры запроса",
+        content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+    )
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String sendUpdates(@RequestBody LinkUpdateRequest request) throws IncorrectUpdateRequest {
+    public String sendUpdates(@RequestBody LinkUpdateRequest request) throws IncorrectRequest {
         if (request.getUrl() == null || request.getTgChatIds() == null) {
-            throw new IncorrectUpdateRequest("Некорректные параметры запроса");
+            throw new IncorrectRequest("Некорректные параметры запроса");
         }
 
         service.sendUpdate(request);

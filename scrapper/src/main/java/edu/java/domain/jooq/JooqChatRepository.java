@@ -1,7 +1,7 @@
 package edu.java.domain.jooq;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
 import edu.jooq.tables.ChatLinkConnection;
 import edu.jooq.tables.Chats;
 import java.sql.Timestamp;
@@ -17,7 +17,7 @@ public class JooqChatRepository {
 
     private final DSLContext jooqContext;
 
-    public void addChatRequest(long chatId) throws ChatAlreadyExistsException  {
+    public void addChatRequest(long chatId) throws ChatAlreadyExistsException {
         try {
             jooqContext.insertInto(Chats.CHATS)
                 .values(chatId, 0, 0, Timestamp.valueOf(LocalDateTime.now()))

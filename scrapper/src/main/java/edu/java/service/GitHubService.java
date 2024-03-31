@@ -2,8 +2,8 @@ package edu.java.service;
 
 import edu.java.clients.GitHubClient;
 import edu.java.dto.github.CommitDto;
-import edu.java.response.resource.github.GitHubExtendedResponse;
-import edu.java.response.resource.github.GitHubResponse;
+import edu.java.response.github.GitHubExtendedResponse;
+import edu.java.response.github.GitHubResponse;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
 package edu.java.clients;
 
-import edu.java.response.resource.sof.StackOverFlowAnswer;
-import edu.java.response.resource.sof.StackOverFlowAnswersItems;
-import edu.java.response.resource.sof.StackOverFlowResponse;
-import edu.java.response.resource.sof.StackOverFlowResponseItems;
+import edu.java.response.sof.StackOverFlowAnswer;
+import edu.java.response.sof.StackOverFlowAnswersItems;
+import edu.java.response.sof.StackOverFlowResponse;
+import edu.java.response.sof.StackOverFlowResponseItems;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;

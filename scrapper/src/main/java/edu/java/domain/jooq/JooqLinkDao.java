@@ -1,6 +1,6 @@
 package edu.java.domain.jooq;
 
-import edu.java.response.api.LinkResponse;
+import edu.java.responses.LinkResponse;
 import edu.jooq.tables.ChatLinkConnection;
 import edu.jooq.tables.Chats;
 import edu.jooq.tables.Links;

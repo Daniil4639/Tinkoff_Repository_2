@@ -1,8 +1,8 @@
 package edu.java.scheduler;
 
-import edu.java.response.api.LinkDataBaseInfo;
-import edu.java.response.resource.github.GitHubResponse;
-import edu.java.response.resource.sof.StackOverFlowResponse;
+import edu.java.response.github.GitHubResponse;
+import edu.java.response.sof.StackOverFlowResponse;
+import edu.java.responses.LinkDataBaseInfo;
 import edu.java.service.GitHubService;
 import edu.java.service.StackOverFlowService;
 import java.time.OffsetDateTime;
@@ -19,7 +19,7 @@ public class JdbcSchedulerService {
 
     private final GitHubService gitHubService;
     private final StackOverFlowService stackOverFlowService;
-    private final JooqSchedulerDao schedulerDao;
+    private final JdbcSchedulerDao schedulerDao;
 
     private final Pattern gitHubPattern =
         Pattern.compile("https://github.com/([a-zA-Z0-9-_.,]+)/([a-zA-Z0-9-_.,]+)");
@@ -37,7 +37,7 @@ public class JdbcSchedulerService {
         }
 
         if (list.length != 0) {
-            schedulerDao.updateLastCheck(list, nowTime);
+            updateLastCheckTime(list, nowTime);
         }
 
         return list;
@@ -83,5 +83,10 @@ public class JdbcSchedulerService {
         schedulerDao.updateLinkDate(info.getId(), data.getLastUpdate());
         return new ImmutablePair<>(true, stackOverFlowService
             .getUpdateInfo(matcher.group(1), info.getLastUpdate(), data));
+    }
+
+    private void updateLastCheckTime(LinkDataBaseInfo[] list, OffsetDateTime nowTime) {
+
+        schedulerDao.updateLastCheck(list, nowTime);
     }
 }
