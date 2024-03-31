@@ -1,6 +1,6 @@
-package edu.java.bot.configuration.retryWebClient;
+package edu.java.configuration.retryWebClient;
 
-import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.configuration.ApplicationConfig;
 import java.time.Duration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.util.retry.Retry;
 
 @Configuration
-public class RetryWebClientConfiguration {
+public class RetryScrapperClientConfiguration {
 
     private static final int MAX_ATTEMPTS_COUNT = 3;
     private static final int SECOND_BACKOFF = 2;

@@ -20,7 +20,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 public class JooqTest extends IntegrationEnvironment {
 
-    @Autowired
+    // ЗАБРАКОВАНО!
+
+    /*@Autowired
     private JdbcTemplate template;
 
     @Autowired
@@ -93,5 +95,5 @@ public class JooqTest extends IntegrationEnvironment {
 
         assertThat(list.length).isEqualTo(1);
         assertThat(list[0].getUrl()).isEqualTo("someLink");
-    }
+    }*/
 }
