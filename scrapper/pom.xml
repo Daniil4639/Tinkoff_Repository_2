@@ -140,12 +140,6 @@
             <version>0.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>edu.java</groupId>
-            <artifactId>web_constructs</artifactId>
-            <version>0.1</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

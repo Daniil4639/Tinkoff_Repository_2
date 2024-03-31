@@ -37,7 +37,6 @@ public class BotWebController {
         }
 
         service.sendUpdate(request);
-
         return "Обновление обработано";
     }
 }

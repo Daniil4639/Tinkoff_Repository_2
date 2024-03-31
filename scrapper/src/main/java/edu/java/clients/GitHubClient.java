@@ -31,7 +31,6 @@ public class GitHubClient extends Client {
             .blockOptional();
 
         response.ifPresent(value -> value.setLastUpdate(value.getLastUpdate().toLocalDateTime().atOffset(offset)));
-
         return response.orElse(null);
     }
 
