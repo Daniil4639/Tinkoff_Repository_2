@@ -71,6 +71,7 @@ public class StackOverFlowServiceTest extends AbstractClientTest {
         assertThat(response.getQuestionLink()).isEqualTo("https://stackoverflow.com/questions/2024/test_question");
         assertThat(response.getCreationDate().toString()).isEqualTo("2018-03-22T07:33:02Z");
         assertThat(response.getLastUpdate().toString()).isEqualTo("2019-11-21T11:03:18+03:00");
+<<<<<<< HEAD
     }
 
     @Test
@@ -87,5 +88,7 @@ public class StackOverFlowServiceTest extends AbstractClientTest {
 
         assertThat(result.replace(System.lineSeparator(), "\n"))
             .isEqualTo(CORRECT_RESPONSE);
+=======
+>>>>>>> 3228e59 (частичная реализация ДЗ №7)
     }
 }

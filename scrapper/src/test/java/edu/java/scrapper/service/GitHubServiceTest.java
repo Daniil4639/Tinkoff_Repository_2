@@ -85,6 +85,7 @@ public class GitHubServiceTest extends AbstractClientTest {
         assertThat(response.getReposLink()).isEqualTo("https://github.com/test_user/test_repos");
         assertThat(response.getCreationDate().toString()).isEqualTo("2024-02-07T09:58:39Z");
         assertThat(response.getLastUpdate().toString()).isEqualTo("2024-02-07T10:00:21+03:00");
+<<<<<<< HEAD
     }
 
     @Test
@@ -106,5 +107,7 @@ public class GitHubServiceTest extends AbstractClientTest {
 
         assertThat(result.replace(System.lineSeparator(), "\n"))
             .isEqualTo(CORRECT_EXTENDED_ANSWER);
+=======
+>>>>>>> 3228e59 (частичная реализация ДЗ №7)
     }
 }
