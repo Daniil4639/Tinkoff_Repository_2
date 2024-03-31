@@ -1,7 +1,8 @@
 package edu.java.scheduler;
 
 import edu.java.clients.BotClient;
-import edu.java.response.api.LinkDataBaseInfo;
+import edu.java.exceptions.BadRequestException;
+import edu.java.responses.LinkDataBaseInfo;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class LinkUpdateScheduler {
     private final BotClient client;
 
     @Scheduled(fixedDelayString = "#{@schedulerInterval}")
-    public void update() {
+    public void update() throws BadRequestException {
         LinkDataBaseInfo[] list;
 
         list = schedulerService.getOldLinks(2);

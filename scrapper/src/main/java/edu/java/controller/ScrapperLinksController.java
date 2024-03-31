@@ -1,13 +1,13 @@
 package edu.java.controller;
 
-import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.db_services.LinksService;
-import edu.java.requests.api.AddLinkRequest;
-import edu.java.requests.api.RemoveLinkRequest;
-import edu.java.response.api.ApiErrorResponse;
-import edu.java.response.api.LinkResponse;
-import edu.java.response.api.ListLinksResponse;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.exceptions.IncorrectRequest;
+import edu.java.requests.AddLinkRequest;
+import edu.java.requests.RemoveLinkRequest;
+import edu.java.responses.ApiErrorResponse;
+import edu.java.responses.LinkResponse;
+import edu.java.responses.LinkResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,8 +36,7 @@ public class ScrapperLinksController {
                  content = {@Content(schema = @Schema(implementation = ApiErrorResponse.class))})
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ListLinksResponse getLinks(@RequestParam Integer tgChatId) throws
-        IncorrectChatOperationRequest {
+    public LinkResponseList getLinks(@RequestParam Integer tgChatId) throws IncorrectRequest {
 
         return linksService.getLinksByChat(tgChatId);
     }
@@ -49,7 +48,7 @@ public class ScrapperLinksController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public LinkResponse trackLink(@RequestParam Integer tgChatId,
-        @RequestBody AddLinkRequest request) throws IncorrectChatOperationRequest {
+        @RequestBody AddLinkRequest request) throws IncorrectRequest {
 
         linksService.addLink(tgChatId, request.getLink());
         return new LinkResponse(tgChatId, request.getLink());
@@ -64,7 +63,7 @@ public class ScrapperLinksController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public LinkResponse untrackLink(@RequestParam Integer tgChatId,
-        @RequestBody RemoveLinkRequest request) throws IncorrectChatOperationRequest,
+        @RequestBody RemoveLinkRequest request) throws IncorrectRequest,
         DoesNotExistException {
 
         linksService.deleteLink(tgChatId, request.getLink());

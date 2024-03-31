@@ -5,7 +5,7 @@ import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.domain.jpa.entities.ConnectionEntity;
 import edu.java.domain.jpa.entities.ConnectionIds;
 import edu.java.domain.jpa.entities.LinkEntity;
-import edu.java.response.api.LinkResponse;
+import edu.java.responses.LinkResponse;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;

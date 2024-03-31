@@ -1,9 +1,9 @@
 package edu.java.domain.jpa;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.domain.interfaces.ChatRepository;
 import edu.java.domain.jpa.entities.ChatEntity;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;

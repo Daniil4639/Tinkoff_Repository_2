@@ -1,8 +1,8 @@
 package edu.java.service;
 
 import edu.java.clients.StackOverflowClient;
-import edu.java.response.resource.sof.StackOverFlowAnswer;
-import edu.java.response.resource.sof.StackOverFlowResponse;
+import edu.java.response.sof.StackOverFlowAnswer;
+import edu.java.response.sof.StackOverFlowResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

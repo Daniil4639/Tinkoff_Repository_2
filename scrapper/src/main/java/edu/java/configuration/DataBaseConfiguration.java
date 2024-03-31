@@ -6,7 +6,6 @@ import org.jooq.impl.DefaultConfiguration;
 import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
@@ -25,11 +24,6 @@ public class DataBaseConfiguration {
         dataSource.setPassword(USER_PASSWORD_STRING);
 
         return dataSource;
-    }
-
-    @Bean
-    public JdbcTemplate getTemplate() {
-        return new JdbcTemplate(getDataBase());
     }
 
     @Bean

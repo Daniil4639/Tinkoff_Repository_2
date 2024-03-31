@@ -1,6 +1,6 @@
 package edu.java.domain.interfaces;
 
-import edu.java.response.api.LinkResponse;
+import edu.java.responses.LinkResponse;
 import java.time.OffsetDateTime;
 
 public interface LinkDao {

@@ -3,17 +3,16 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperClient;
-import edu.java.bot.responses.ListLinksResponse;
+import edu.java.responses.LinkResponseList;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ListCommand implements Command {
 
-    @Autowired
-    private ScrapperClient client;
-    private long chatId;
+    private final ScrapperClient client;
 
     @Override
     public String name() {
@@ -27,14 +26,13 @@ public class ListCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        this.chatId = update.message().chat().id();
-
-        return new SendMessage(update.message().chat().id(), this.message());
+        return new SendMessage(update.message().chat().id(),
+            this.message(update.message().chat().id()));
     }
 
     @Override
-    public String message() {
-        ListLinksResponse list = client.getLinks(chatId).block();
+    public String message(long chatId) {
+        LinkResponseList list = client.getLinks(chatId).block();
         StringBuilder result = new StringBuilder();
 
         if (list == null || list.getSize() == 0) {

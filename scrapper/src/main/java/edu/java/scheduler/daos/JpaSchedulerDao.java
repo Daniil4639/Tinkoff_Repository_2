@@ -2,7 +2,7 @@ package edu.java.scheduler.daos;
 
 import edu.java.domain.jpa.entities.ConnectionEntity;
 import edu.java.domain.jpa.entities.LinkEntity;
-import edu.java.response.api.LinkDataBaseInfo;
+import edu.java.responses.LinkDataBaseInfo;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.OffsetDateTime;

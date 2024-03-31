@@ -1,6 +1,6 @@
 package edu.java.scheduler.daos;
 
-import edu.java.response.api.LinkDataBaseInfo;
+import edu.java.responses.LinkDataBaseInfo;
 import edu.jooq.tables.ChatLinkConnection;
 import edu.jooq.tables.Links;
 import java.time.OffsetDateTime;

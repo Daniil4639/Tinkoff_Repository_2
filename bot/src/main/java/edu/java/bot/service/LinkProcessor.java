@@ -5,19 +5,16 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.clients.ScrapperClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class LinkProcessor {
 
-    @Autowired
-    private ScrapperClient client;
-    @Autowired
-    private TelegramBot bot;
+    private final ScrapperClient client;
+    private final TelegramBot bot;
 
-    public boolean checkLink(Update update) {
+    public void checkLink(Update update) {
         long id = update.message().chat().id();
 
         String resultMessage;
@@ -34,7 +31,6 @@ public class LinkProcessor {
 
         bot.execute(new SendMessage(id, resultMessage));
         this.clear(id);
-        return true;
     }
 
     public void clear(long chatId) {

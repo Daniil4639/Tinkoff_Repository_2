@@ -1,9 +1,9 @@
 package edu.java.db_services;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
-import edu.java.api_exceptions.IncorrectChatOperationRequest;
 import edu.java.domain.interfaces.ChatRepository;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
+import edu.java.exceptions.IncorrectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +14,9 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
-    public String addChat(Long chatId) throws IncorrectChatOperationRequest {
+    public String addChat(Long chatId) throws IncorrectRequest {
         if (chatId == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
         try {
@@ -28,18 +28,14 @@ public class ChatService {
         return "Чат зарегистрирован!";
     }
 
-    public void deleteChat(Long chatId) throws IncorrectChatOperationRequest,
+    public void deleteChat(Long chatId) throws IncorrectRequest,
         DoesNotExistException {
 
         if (chatId == null) {
-            throw new IncorrectChatOperationRequest(incorrectRequestParams);
+            throw new IncorrectRequest(incorrectRequestParams);
         }
 
-        try {
-            chatRepository.deleteChatRequest(chatId);
-        } catch (DoesNotExistException ex) {
-            throw new DoesNotExistException("Чат не существует");
-        }
+        chatRepository.deleteChatRequest(chatId);
     }
 
     public boolean isTrack(Long chatId) {

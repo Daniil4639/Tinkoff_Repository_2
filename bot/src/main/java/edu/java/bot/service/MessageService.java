@@ -4,12 +4,11 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
-import edu.java.bot.requests.LinkUpdateRequest;
+import edu.java.requests.LinkUpdateRequest;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,13 +18,10 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("ReturnCount")
 public class MessageService {
 
-    @Autowired
-    private LinkProcessor linkProcessor;
-    @Autowired
-    private TelegramBot bot;
-
-    private final String unknownCommand = "Команда не распознана!";
+    private final LinkProcessor linkProcessor;
+    private final TelegramBot bot;
     private final List<Command> commands;
+    private final String unknownCommand = "Команда не распознана!";
     private final String emptyMessage = "Empty message!";
 
     public void checkUpdate(Update update) {
@@ -33,6 +29,8 @@ public class MessageService {
             log.error(emptyMessage);
             return;
         }
+
+        boolean isCommand = false;
 
         for (Command command: commands) {
             if (command.name().equals(update.message().text())) {
@@ -45,21 +43,12 @@ public class MessageService {
                     log.error("Incorrect SendMessage handler!", exception);
                 }
 
-                command.message();
+                command.message(update.message().chat().id());
                 return;
             }
         }
 
-        if (linkProcessor.checkLink(update)) {
-            return;
-        }
-
-        try {
-            bot.execute(new SendMessage(update.message().chat().id(), unknownCommand));
-            log.info("Command was not recognized!");
-        } catch (Exception exception) {
-            log.error("Received Update hasn't enough information for sending message!", exception);
-        }
+        linkProcessor.checkLink(update);
     }
 
     public void sendUpdate(LinkUpdateRequest request) {

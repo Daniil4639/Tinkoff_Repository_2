@@ -1,8 +1,8 @@
 package edu.java.domain.jdbc;
 
-import edu.java.api_exceptions.ChatAlreadyExistsException;
-import edu.java.api_exceptions.DoesNotExistException;
 import edu.java.domain.interfaces.ChatRepository;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.DoesNotExistException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class JdbcChatRepository implements ChatRepository {
     @Override
     public void addChatRequest(long chatId) throws ChatAlreadyExistsException {
         try {
-            jdbcTemplate.execute("INSERT INTO Chats VALUES (" + chatId + ", 0, 0, '"
-                + Timestamp.valueOf(LocalDateTime.now()) + "')");
+            jdbcTemplate.update("INSERT INTO Chats VALUES (?, 0, 0, ?)",
+                chatId, Timestamp.valueOf(LocalDateTime.now()));
         } catch (Exception ex) {
             throw new ChatAlreadyExistsException("Чат уже зарегистрирован");
         }
@@ -36,29 +36,28 @@ public class JdbcChatRepository implements ChatRepository {
             throw new DoesNotExistException("Чат не существует");
         }
 
-        jdbcTemplate.execute("DELETE FROM Chat_Link_Connection WHERE chat_id=" + chatId);
-        jdbcTemplate.execute("DELETE FROM Chats WHERE chat_id=" + chatId);
+        jdbcTemplate.update("DELETE FROM Chat_Link_Connection WHERE chat_id=?", chatId);
+        jdbcTemplate.update("DELETE FROM Chats WHERE chat_id=?", chatId);
     }
 
     @Override
     public void makeTrack(long chatId) {
-        jdbcTemplate.update("UPDATE Chats SET wait_track=1 "
-            + "WHERE chat_id=" + chatId);
+        jdbcTemplate.update("UPDATE Chats SET wait_track=1 WHERE chat_id=?", chatId);
     }
 
     @Override
     public void makeUntrack(long chatId) {
-        jdbcTemplate.update("UPDATE Chats SET wait_untrack=1 WHERE chat_id=" + chatId);
+        jdbcTemplate.update("UPDATE Chats SET wait_untrack=1 WHERE chat_id=?", chatId);
     }
 
     @Override
     public void deleteTrack(long chatId) {
-        jdbcTemplate.update("UPDATE Chats SET wait_track=0 WHERE chat_id=" + chatId);
+        jdbcTemplate.update("UPDATE Chats SET wait_track=0 WHERE chat_id=?", chatId);
     }
 
     @Override
     public void deleteUntrack(long chatId) {
-        jdbcTemplate.update("UPDATE Chats SET wait_untrack=0 WHERE chat_id=" + chatId);
+        jdbcTemplate.update("UPDATE Chats SET wait_untrack=0 WHERE chat_id=?", chatId);
     }
 
     @Override

@@ -11,5 +11,5 @@ public interface Command {
 
     SendMessage handle(Update update);
 
-    String message();
+    String message(long chatId);
 }
