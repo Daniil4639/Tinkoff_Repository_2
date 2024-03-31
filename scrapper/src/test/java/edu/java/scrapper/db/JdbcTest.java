@@ -1,7 +1,7 @@
 package edu.java.scrapper.db;
 
-import edu.java.domain.JdbcChatRepository;
-import edu.java.domain.JdbcLinkDao;
+import edu.java.domain.jdbc.JdbcChatRepository;
+import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.responses.LinkResponse;

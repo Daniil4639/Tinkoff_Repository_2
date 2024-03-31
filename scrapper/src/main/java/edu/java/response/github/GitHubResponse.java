@@ -1,4 +1,4 @@
-package edu.java.response;
+package edu.java.response.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
@@ -16,6 +16,6 @@ public class GitHubResponse {
     private String reposLink;
     @JsonProperty("created_at")
     private OffsetDateTime creationDate;
-    @JsonProperty("updated_at")
+    @JsonProperty("pushed_at")
     private OffsetDateTime lastUpdate;
 }

@@ -35,8 +35,7 @@ public class ScrapperChatController {
                  content = {@Content(schema = @Schema(implementation = ApiErrorResponse.class))})
     @PostMapping(ID_MAPPING)
     @ResponseStatus(HttpStatus.OK)
-    public String chatRegistration(@PathVariable Long id) throws
-        IncorrectRequest {
+    public String chatRegistration(@PathVariable Long id) throws IncorrectRequest {
 
         return chatService.addChat(id);
     }
@@ -53,7 +52,6 @@ public class ScrapperChatController {
         IncorrectRequest, DoesNotExistException {
 
         chatService.deleteChat(id);
-
         return "Чат успешно удалён";
     }
 

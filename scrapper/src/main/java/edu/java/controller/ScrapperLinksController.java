@@ -36,8 +36,7 @@ public class ScrapperLinksController {
                  content = {@Content(schema = @Schema(implementation = ApiErrorResponse.class))})
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public LinkResponseList getLinks(@RequestParam Integer tgChatId) throws
-        IncorrectRequest {
+    public LinkResponseList getLinks(@RequestParam Integer tgChatId) throws IncorrectRequest {
 
         return linksService.getLinksByChat(tgChatId);
     }
@@ -52,7 +51,6 @@ public class ScrapperLinksController {
         @RequestBody AddLinkRequest request) throws IncorrectRequest {
 
         linksService.addLink(tgChatId, request.getLink());
-
         return new LinkResponse(tgChatId, request.getLink());
     }
 

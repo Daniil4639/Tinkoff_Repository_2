@@ -23,7 +23,7 @@ public class UpdateRunnerBot {
         log.info("Telegram-Bot is running!");
 
         bot.setUpdatesListener(list -> {
-            list.forEach(update -> messageService.checkUpdate(update, bot));
+            list.forEach(messageService::checkUpdate);
 
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });

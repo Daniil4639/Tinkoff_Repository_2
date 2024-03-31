@@ -1,10 +1,10 @@
 package edu.java.jdbc;
 
-import edu.java.domain.JdbcLinkDao;
+import edu.java.domain.jooq.JooqLinkDao;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.exceptions.IncorrectRequest;
-import edu.java.response.GitHubResponse;
-import edu.java.response.StackOverFlowResponse;
+import edu.java.response.github.GitHubResponse;
+import edu.java.response.sof.StackOverFlowResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.LinkResponseList;
 import edu.java.service.GitHubService;
@@ -22,7 +22,7 @@ public class JdbcLinksService {
 
     private final GitHubService gitHubService;
     private final StackOverFlowService stackOverFlowService;
-    private final JdbcLinkDao linkDao;
+    private final JooqLinkDao linkDao;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
     private final Pattern gitHubPattern =
@@ -37,7 +37,9 @@ public class JdbcLinksService {
 
         LinkResponse[] list = linkDao.getLinksByChatRequest(chatId);
 
-        return new LinkResponseList(list, (list == null) ? (0) : (list.length));
+        list = (list == null) ? (new LinkResponse[0]) : (list);
+
+        return new LinkResponseList(list, list.length);
     }
 
     @SuppressWarnings("ReturnCount")
@@ -67,7 +69,7 @@ public class JdbcLinksService {
         throw new IncorrectRequest(incorrectRequestParams);
     }
 
-    public Integer getLinkId(String link) {
+    public Long getLinkId(String link) {
         return linkDao.getLinkId(link);
     }
 
@@ -78,7 +80,7 @@ public class JdbcLinksService {
             throw new IncorrectRequest(incorrectRequestParams);
         }
 
-        Integer linkId = getLinkId(link);
+        Long linkId = getLinkId(link);
 
         if (linkId == null) {
             throw new DoesNotExistException("Ссылка не найдена");

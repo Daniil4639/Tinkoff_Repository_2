@@ -38,7 +38,7 @@ public class BotClientTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(CORRECT_RESPONSE)));
 
-        StepVerifier.create(client.updateLink("testLink", new int[] {1, 2, 3}))
+        StepVerifier.create(client.updateLink("testLink", new int[] {1, 2, 3}, ""))
             .expectNextMatches(response -> {
                 assertThat(response).isEqualTo(CORRECT_RESPONSE);
                 return true;
@@ -54,7 +54,7 @@ public class BotClientTest extends AbstractClientTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(INCORRECT_RESPONSE_BODY)));
 
-        StepVerifier.create(client.updateLink("testLink", new int[] {1, 2, 3}))
+        StepVerifier.create(client.updateLink("testLink", new int[] {1, 2, 3}, ""))
             .expectErrorMatches(throwable -> {
                 assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;

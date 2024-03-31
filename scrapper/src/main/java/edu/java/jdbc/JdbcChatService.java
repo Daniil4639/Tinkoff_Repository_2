@@ -1,6 +1,6 @@
 package edu.java.jdbc;
 
-import edu.java.domain.JdbcChatRepository;
+import edu.java.domain.jooq.JooqChatRepository;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.exceptions.IncorrectRequest;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JdbcChatService {
 
-    private final JdbcChatRepository jdbcChatRepository;
+    private final JooqChatRepository chatRepository;
     private final String incorrectRequestParams = "Некорректные параметры запроса";
 
     public String addChat(Long chatId) throws IncorrectRequest {
@@ -22,7 +22,7 @@ public class JdbcChatService {
         }
 
         try {
-            jdbcChatRepository.addChatRequest(chatId);
+            chatRepository.addChatRequest(chatId);
         } catch (ChatAlreadyExistsException ex) {
             return ex.getMessage();
         }
@@ -37,34 +37,30 @@ public class JdbcChatService {
             throw new IncorrectRequest(incorrectRequestParams);
         }
 
-        try {
-            jdbcChatRepository.deleteChatRequest(chatId);
-        } catch (DoesNotExistException ex) {
-            throw new DoesNotExistException("Чат не существует");
-        }
+        chatRepository.deleteChatRequest(chatId);
     }
 
     public boolean isTrack(Long chatId) {
-        return jdbcChatRepository.isWaitingTrack(chatId);
+        return chatRepository.isWaitingTrack(chatId);
     }
 
     public boolean isUntrack(Long chatId) {
-        return jdbcChatRepository.isWaitingUntrack(chatId);
+        return chatRepository.isWaitingUntrack(chatId);
     }
 
     public void makeTrack(Long chatId) {
-        jdbcChatRepository.makeTrack(chatId);
+        chatRepository.makeTrack(chatId);
     }
 
     public void makeUntrack(Long chatId) {
-        jdbcChatRepository.makeUntrack(chatId);
+        chatRepository.makeUntrack(chatId);
     }
 
     public void deleteTrack(Long chatId) {
-        jdbcChatRepository.deleteTrack(chatId);
+        chatRepository.deleteTrack(chatId);
     }
 
     public void deleteUnrack(Long chatId) {
-        jdbcChatRepository.deleteUntrack(chatId);
+        chatRepository.deleteUntrack(chatId);
     }
 }

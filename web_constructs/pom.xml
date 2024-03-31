@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>web_constructs</artifactId>
-    <version>${revision}</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

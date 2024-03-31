@@ -1,5 +1,6 @@
 package edu.java.bot.controller;
 
+import edu.java.bot.service.MessageService;
 import edu.java.exceptions.IncorrectRequest;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.responses.ApiErrorResponse;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/updates")
+@RequiredArgsConstructor
 public class BotWebController {
+
+    private final MessageService service;
 
     @Operation(summary = "Отправить обновление")
     @ApiResponse(responseCode = "200", description = "Обновление обработано")
@@ -31,6 +36,7 @@ public class BotWebController {
             throw new IncorrectRequest("Некорректные параметры запроса");
         }
 
+        service.sendUpdate(request);
         return "Обновление обработано";
     }
 }
