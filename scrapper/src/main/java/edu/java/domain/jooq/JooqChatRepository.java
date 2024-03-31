@@ -1,5 +1,6 @@
 package edu.java.domain.jooq;
 
+import edu.java.domain.interfaces.ChatRepository;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
 import edu.jooq.tables.ChatLinkConnection;
@@ -10,13 +11,16 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
-public class JooqChatRepository {
+public class JooqChatRepository implements ChatRepository {
 
     private final DSLContext jooqContext;
 
+    @Override
     public void addChatRequest(long chatId) throws ChatAlreadyExistsException {
         try {
             jooqContext.insertInto(Chats.CHATS)
@@ -27,6 +31,7 @@ public class JooqChatRepository {
         }
     }
 
+    @Override
     public void deleteChatRequest(long chatId) throws DoesNotExistException {
         int count = jooqContext.fetchCount(jooqContext
             .selectFrom(Chats.CHATS)
@@ -44,30 +49,35 @@ public class JooqChatRepository {
                     .execute();
     }
 
+    @Override
     public void makeTrack(long chatId) {
         jooqContext.update(Chats.CHATS).set(Chats.CHATS.WAIT_TRACK, 1)
             .where(Chats.CHATS.CHAT_ID.eq(chatId))
             .execute();
     }
 
+    @Override
     public void makeUntrack(long chatId) {
         jooqContext.update(Chats.CHATS).set(Chats.CHATS.WAIT_UNTRACK, 1)
             .where(Chats.CHATS.CHAT_ID.eq(chatId))
             .execute();
     }
 
+    @Override
     public void deleteTrack(long chatId) {
         jooqContext.update(Chats.CHATS).set(Chats.CHATS.WAIT_TRACK, 0)
             .where(Chats.CHATS.CHAT_ID.eq(chatId))
             .execute();
     }
 
+    @Override
     public void deleteUntrack(long chatId) {
         jooqContext.update(Chats.CHATS).set(Chats.CHATS.WAIT_UNTRACK, 0)
             .where(Chats.CHATS.CHAT_ID.eq(chatId))
             .execute();
     }
 
+    @Override
     public boolean isWaitingTrack(long chatId) {
         long isWaiting = jooqContext.select(Chats.CHATS.WAIT_TRACK)
             .from(Chats.CHATS)
@@ -79,6 +89,7 @@ public class JooqChatRepository {
         return isWaiting != 0;
     }
 
+    @Override
     public boolean isWaitingUntrack(long chatId) {
         long isWaiting = jooqContext.select(Chats.CHATS.WAIT_UNTRACK)
             .from(Chats.CHATS)

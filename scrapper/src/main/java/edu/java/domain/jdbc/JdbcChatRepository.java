@@ -1,5 +1,6 @@
 package edu.java.domain.jdbc;
 
+import edu.java.domain.interfaces.ChatRepository;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
 import java.sql.Timestamp;
@@ -8,14 +9,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Setter
 @RequiredArgsConstructor
-public class JdbcChatRepository {
+@Transactional
+public class JdbcChatRepository implements ChatRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Override
     public void addChatRequest(long chatId) throws ChatAlreadyExistsException {
         try {
             jdbcTemplate.update("INSERT INTO Chats VALUES (?, 0, 0, ?)",
@@ -25,6 +29,7 @@ public class JdbcChatRepository {
         }
     }
 
+    @Override
     public void deleteChatRequest(long chatId) throws DoesNotExistException {
         Integer count = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chats WHERE chat_id=?",
                 Integer.class, chatId);
@@ -37,22 +42,27 @@ public class JdbcChatRepository {
         jdbcTemplate.update("DELETE FROM Chats WHERE chat_id=?", chatId);
     }
 
+    @Override
     public void makeTrack(long chatId) {
         jdbcTemplate.update("UPDATE Chats SET wait_track=1 WHERE chat_id=?", chatId);
     }
 
+    @Override
     public void makeUntrack(long chatId) {
         jdbcTemplate.update("UPDATE Chats SET wait_untrack=1 WHERE chat_id=?", chatId);
     }
 
+    @Override
     public void deleteTrack(long chatId) {
         jdbcTemplate.update("UPDATE Chats SET wait_track=0 WHERE chat_id=?", chatId);
     }
 
+    @Override
     public void deleteUntrack(long chatId) {
         jdbcTemplate.update("UPDATE Chats SET wait_untrack=0 WHERE chat_id=?", chatId);
     }
 
+    @Override
     public boolean isWaitingTrack(long chatId) {
         Integer isWaiting = jdbcTemplate.queryForObject("SELECT wait_track FROM Chats WHERE "
             + "chat_id = ?", Integer.class, chatId);
@@ -60,6 +70,7 @@ public class JdbcChatRepository {
         return isWaiting == 1;
     }
 
+    @Override
     public boolean isWaitingUntrack(long chatId) {
         Integer isWaiting = jdbcTemplate.queryForObject("SELECT wait_untrack FROM Chats WHERE "
             + "chat_id=?", Integer.class, chatId);

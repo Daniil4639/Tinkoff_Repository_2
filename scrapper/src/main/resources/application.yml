@@ -1,4 +1,5 @@
 app:
+  database-access-type: jpa
   api:
     bot-base-url: http://localhost:8090
     github-base-url: https://api.github.com/

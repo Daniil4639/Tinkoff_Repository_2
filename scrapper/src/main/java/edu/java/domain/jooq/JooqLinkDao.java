@@ -1,5 +1,6 @@
 package edu.java.domain.jooq;
 
+import edu.java.domain.interfaces.LinkDao;
 import edu.java.responses.LinkResponse;
 import edu.jooq.tables.ChatLinkConnection;
 import edu.jooq.tables.Chats;
@@ -11,13 +12,16 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
-public class JooqLinkDao {
+public class JooqLinkDao implements LinkDao {
 
     private final DSLContext jooqContext;
 
+    @Override
     public LinkResponse[] getLinksByChatRequest(long chatId) {
         List<Integer> idList = jooqContext.select(ChatLinkConnection.CHAT_LINK_CONNECTION.LINK_ID)
             .from(ChatLinkConnection.CHAT_LINK_CONNECTION)
@@ -36,6 +40,7 @@ public class JooqLinkDao {
             .toArray(new LinkResponse[] {});
     }
 
+    @Override
     public void addLinkRequest(long chatId, String link, OffsetDateTime createdDate,
         OffsetDateTime updatedDate) {
 
@@ -59,6 +64,7 @@ public class JooqLinkDao {
                     .execute();
     }
 
+    @Override
     public Long getLinkId(String link) {
         return jooqContext.select(Links.LINKS.ID)
             .from(Links.LINKS)
@@ -68,6 +74,7 @@ public class JooqLinkDao {
             .getFirst();
     }
 
+    @Override
     public void deleteLinkRequest(long chatId, long linkId) {
         jooqContext.delete(ChatLinkConnection.CHAT_LINK_CONNECTION)
                 .where(ChatLinkConnection.CHAT_LINK_CONNECTION.CHAT_ID.eq(chatId)
