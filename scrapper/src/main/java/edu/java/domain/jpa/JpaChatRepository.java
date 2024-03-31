@@ -50,7 +50,8 @@ public class JpaChatRepository implements ChatRepository {
             var chat = session.get(ChatEntity.class, chatId);
             chat.setWaitTrack(1);
             session.flush();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -60,7 +61,8 @@ public class JpaChatRepository implements ChatRepository {
             var chat = session.get(ChatEntity.class, chatId);
             chat.setWaitUntrack(1);
             session.flush();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -70,7 +72,8 @@ public class JpaChatRepository implements ChatRepository {
             var chat = session.get(ChatEntity.class, chatId);
             chat.setWaitTrack(0);
             session.flush();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -80,7 +83,8 @@ public class JpaChatRepository implements ChatRepository {
             var chat = session.get(ChatEntity.class, chatId);
             chat.setWaitUntrack(0);
             session.flush();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
