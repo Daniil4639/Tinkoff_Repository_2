@@ -27,6 +27,7 @@ public class GitHubClient extends Client {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(GitHubResponse.class)
+            .retryWhen(retry)
             .log()
             .blockOptional();
 
@@ -63,6 +64,7 @@ public class GitHubClient extends Client {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToFlux(BranchDto.class)
+            .retryWhen(retry)
             .collectList()
             .block();
     }
@@ -74,6 +76,7 @@ public class GitHubClient extends Client {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToFlux(CommitExtendedDto.class)
+            .retryWhen(retry)
             .collectList()
             .block();
 

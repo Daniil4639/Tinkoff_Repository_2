@@ -1,5 +1,6 @@
 app:
   database-access-type: jpa
+  retry-type: constant
   api:
     bot-base-url: http://localhost:8090
     github-base-url: https://api.github.com/
