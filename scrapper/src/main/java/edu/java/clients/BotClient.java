@@ -28,6 +28,7 @@ public class BotClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
-            .bodyToMono(String.class);
+            .bodyToMono(String.class)
+            .retryWhen(retry);
     }
 }

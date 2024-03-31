@@ -33,7 +33,8 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
-            .bodyToMono(String.class);
+            .bodyToMono(String.class)
+            .retryWhen(retry);
     }
 
     public Mono<String> deleteChat(int chatId) {
@@ -52,7 +53,8 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
-            .bodyToMono(String.class);
+            .bodyToMono(String.class)
+            .retryWhen(retry);
     }
 
     public Mono<LinkResponseList> getLinks(long id) {
@@ -68,7 +70,8 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
-            .bodyToMono(LinkResponseList.class);
+            .bodyToMono(LinkResponseList.class)
+            .retryWhen(retry);
     }
 
     public Mono<LinkResponse> addLink(String link, long id) {
@@ -85,7 +88,8 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 
     public Mono<LinkResponse> deleteLink(String link, long id) {
@@ -108,7 +112,8 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 
     public void makeTrack(long id) {
@@ -116,6 +121,7 @@ public class ScrapperClient extends Client {
             .uri(tgChatPath + trackMapping, id)
             .retrieve()
             .bodyToMono(Void.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -124,6 +130,7 @@ public class ScrapperClient extends Client {
             .uri(tgChatPath + untrackMapping, id)
             .retrieve()
             .bodyToMono(Void.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -132,6 +139,7 @@ public class ScrapperClient extends Client {
             .uri(tgChatPath + trackMapping, id)
             .retrieve()
             .bodyToMono(Void.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -140,6 +148,7 @@ public class ScrapperClient extends Client {
             .uri(tgChatPath + untrackMapping, id)
             .retrieve()
             .bodyToMono(Void.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -147,13 +156,15 @@ public class ScrapperClient extends Client {
         return client.get()
             .uri(tgChatPath + trackMapping, id)
             .retrieve()
-            .bodyToMono(Boolean.class);
+            .bodyToMono(Boolean.class)
+            .retryWhen(retry);
     }
 
     public Mono<Boolean> checkUntrack(long id) {
         return client.get()
             .uri(tgChatPath + untrackMapping, id)
             .retrieve()
-            .bodyToMono(Boolean.class);
+            .bodyToMono(Boolean.class)
+            .retryWhen(retry);
     }
 }
