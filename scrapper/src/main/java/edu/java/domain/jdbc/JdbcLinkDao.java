@@ -73,7 +73,6 @@ public class JdbcLinkDao implements LinkDao {
         jdbcTemplate.update("DELETE FROM Chat_Link_Connection WHERE chat_id=? AND link_id=?",
             chatId, linkId);
 
-
         Integer linkCount = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chat_Link_Connection "
             + "WHERE link_id=?", Integer.class, linkId);
 

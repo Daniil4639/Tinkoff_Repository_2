@@ -1,11 +1,11 @@
 package edu.java.domain.jpa;
 
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import edu.java.domain.interfaces.ChatRepository;
 import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

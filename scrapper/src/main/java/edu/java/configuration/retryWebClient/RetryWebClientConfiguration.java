@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.util.retry.Retry;
 
 @Configuration
-public class RetryScrapperClientSConfiguration {
+public class RetryWebClientConfiguration {
 
     private static final int MAX_ATTEMPTS_COUNT = 3;
     private static final int SECOND_BACKOFF = 2;
