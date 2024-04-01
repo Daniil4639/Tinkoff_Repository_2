@@ -1,6 +1,11 @@
 app:
   scrapper-base-url: http://localhost:8080
   telegram-token: ${TELEGRAM_TOKEN}
+  retry-info:
+    type: constant
+    attempts: 3
+    interval: 500
+    codes: 500, 502, 503, 504
 
 spring:
   autoconfigure:

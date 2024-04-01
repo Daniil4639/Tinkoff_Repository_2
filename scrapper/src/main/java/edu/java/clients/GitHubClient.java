@@ -22,13 +22,14 @@ public class GitHubClient extends Client {
     }
 
     public GitHubResponse getInfo(String user, String repos) {
-        Optional<GitHubResponse> response = client.get()
-            .uri("/repos/{user}/{repos}", user, repos)
-            .accept(MediaType.APPLICATION_JSON)
-            .retrieve()
-            .bodyToMono(GitHubResponse.class)
-            .log()
-            .blockOptional();
+        Optional<GitHubResponse> response = retryTemplate.execute(args ->
+            client.get()
+                .uri("/repos/{user}/{repos}", user, repos)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(GitHubResponse.class)
+                .log()
+                .blockOptional());
 
         response.ifPresent(value -> value.setLastUpdate(value.getLastUpdate().toLocalDateTime().atOffset(offset)));
         return response.orElse(null);
@@ -58,24 +59,26 @@ public class GitHubClient extends Client {
     }
 
     private List<BranchDto> getBranches(String user, String repos) {
-        return client.get()
+        return retryTemplate.execute(args ->
+            client.get()
             .uri("/repos/{user}/{repos}/branches", user, repos)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToFlux(BranchDto.class)
             .collectList()
-            .block();
+            .block());
     }
 
     private List<CommitDto> getCommitsByBranch(String uri, OffsetDateTime lastUpdate) {
 
-        List<CommitExtendedDto> commitsList = client.get()
+        List<CommitExtendedDto> commitsList = retryTemplate.execute(args ->
+            client.get()
             .uri(uri)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToFlux(CommitExtendedDto.class)
             .collectList()
-            .block();
+            .block());
 
         if (commitsList == null) {
             return null;
