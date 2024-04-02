@@ -1,6 +1,7 @@
 package edu.java.clients;
 
 import edu.java.exceptions.BadRequestException;
+import edu.java.exceptions.TooManyRequestsException;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.responses.BotApiError;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,12 @@ public class BotClient extends Client {
                     response -> response.bodyToMono(BotApiError.class)
                         .map(BotApiError::getExceptionMessage)
                         .flatMap(message -> Mono.error(new BadRequestException(message)))
+                )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
                 )
                 .bodyToMono(String.class));
     }

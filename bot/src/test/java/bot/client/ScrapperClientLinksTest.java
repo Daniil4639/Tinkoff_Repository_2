@@ -74,7 +74,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
         StepVerifier.create(client.getLinks(12))
             .expectErrorMatches(throwable -> {
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();
@@ -106,7 +106,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
         StepVerifier.create(client.addLink("testLink", 12))
             .expectErrorMatches(throwable -> {
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();
@@ -138,7 +138,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
         StepVerifier.create(client.deleteLink("testLink", 12))
             .expectErrorMatches(throwable -> {
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();
@@ -154,7 +154,7 @@ public class ScrapperClientLinksTest extends AbstractClientTest {
 
         StepVerifier.create(client.deleteLink("testLink", 12))
             .expectErrorMatches(throwable -> {
-                assertThat(((NotFoundException)throwable).message).isEqualTo(NOT_FOUND_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(NOT_FOUND_RESPONSE);
                 return true;
             })
             .verify();

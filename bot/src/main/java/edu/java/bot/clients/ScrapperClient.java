@@ -2,6 +2,7 @@ package edu.java.bot.clients;
 
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
+import edu.java.exceptions.TooManyRequestsException;
 import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.BotApiError;
@@ -34,6 +35,12 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
+                )
             .bodyToMono(String.class));
     }
 
@@ -54,6 +61,12 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
+                )
             .bodyToMono(String.class));
     }
 
@@ -71,6 +84,12 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
+                )
             .bodyToMono(LinkResponseList.class));
     }
 
@@ -89,6 +108,12 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new BadRequestException(message)))
             )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
+                )
             .bodyToMono(LinkResponse.class));
     }
 
@@ -113,6 +138,12 @@ public class ScrapperClient extends Client {
                     .map(BotApiError::getExceptionMessage)
                     .flatMap(message -> Mono.error(new NotFoundException(message)))
             )
+                .onStatus(
+                    HttpStatus.TOO_MANY_REQUESTS::equals,
+                    response -> response.bodyToMono(BotApiError.class)
+                        .map(BotApiError::getExceptionMessage)
+                        .flatMap(message -> Mono.error(new TooManyRequestsException()))
+                )
             .bodyToMono(LinkResponse.class));
     }
 

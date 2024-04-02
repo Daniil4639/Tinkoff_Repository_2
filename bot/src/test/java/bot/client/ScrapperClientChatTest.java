@@ -62,7 +62,7 @@ public class ScrapperClientChatTest extends AbstractClientTest {
 
         StepVerifier.create(client.registerChat(12))
             .expectErrorMatches(throwable -> {
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();
@@ -96,7 +96,7 @@ public class ScrapperClientChatTest extends AbstractClientTest {
             .expectErrorMatches(throwable -> {
                 System.out.println(throwable.getMessage());
                 System.out.println(throwable.toString());
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();
@@ -112,7 +112,7 @@ public class ScrapperClientChatTest extends AbstractClientTest {
 
         StepVerifier.create(client.deleteChat(13))
             .expectErrorMatches(throwable -> {
-                assertThat(((NotFoundException)throwable).message).isEqualTo(NOT_FOUND_RESPONSE);
+                assertThat((throwable).getMessage()).isEqualTo(NOT_FOUND_RESPONSE);
                 return true;
             })
             .verify();

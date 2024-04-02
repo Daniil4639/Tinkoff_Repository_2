@@ -1,0 +1,16 @@
+app:
+  scrapper-base-url: http://localhost:1234
+  telegram-token: none
+  retry-info:
+    type: constant
+    attempts: 3
+    interval: 500
+    codes: 500, 502, 503, 504
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: bot
+  jackson:
+    time-zone: UTC

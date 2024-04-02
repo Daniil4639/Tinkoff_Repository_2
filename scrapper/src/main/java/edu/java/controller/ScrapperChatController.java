@@ -27,8 +27,6 @@ public class ScrapperChatController {
 
     private final static String ID_MAPPING = "/{id}";
 
-    private final static String INCORRECT_REQUEST_PARAMS = "Некорректные параметры запроса";
-
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponse(responseCode = "200", description = "Чат зарегистрирован")
     @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса",
