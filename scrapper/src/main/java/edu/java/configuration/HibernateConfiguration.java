@@ -4,10 +4,12 @@ import edu.java.domain.jpa.entities.ChatEntity;
 import edu.java.domain.jpa.entities.ConnectionEntity;
 import edu.java.domain.jpa.entities.LinkEntity;
 import org.hibernate.SessionFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 
-@Configuration
+@Validated
+@ConfigurationProperties(prefix = "spring.jpa.properties")
 public class HibernateConfiguration {
 
     @Bean(name = "entityManagerFactory")

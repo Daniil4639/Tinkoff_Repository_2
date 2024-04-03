@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +26,15 @@ public class JpaSchedulerDao implements SchedulerDao {
     @Override
     public LinkDataBaseInfo[] getOldLinksRequest(OffsetDateTime oldLinksTime) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             List<LinkEntity> links = session.createQuery("from LinkEntity", LinkEntity.class)
                 .getResultList()
                 .stream()
                 .filter(elem -> oldLinksTime.isAfter(createCorrectDate(elem.getLastCheck())))
                 .toList();
+
+            transaction.commit();
 
             return links.stream()
                 .map(elem -> new LinkDataBaseInfo(Math.toIntExact(elem.getId()),
@@ -44,7 +47,7 @@ public class JpaSchedulerDao implements SchedulerDao {
     @Override
     public void addTgChatsInfo(LinkDataBaseInfo linkInfo) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             Integer[] chats = session.createQuery(
                 "from ConnectionEntity where id.link.id=" + linkInfo.getId(),
@@ -54,6 +57,8 @@ public class JpaSchedulerDao implements SchedulerDao {
                 .toArray(Integer[]::new);
 
             linkInfo.setTgChatIds(chats);
+
+            transaction.commit();
         }
     }
 
@@ -64,7 +69,7 @@ public class JpaSchedulerDao implements SchedulerDao {
             .toList();
 
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             for (Integer id: ids) {
                 var link = session.get(LinkEntity.class, id);
@@ -72,17 +77,19 @@ public class JpaSchedulerDao implements SchedulerDao {
             }
 
             session.flush();
+            transaction.commit();
         }
     }
 
     @Override
     public void updateLinkDate(int linkId, OffsetDateTime newLastUpdateDate) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             var link = session.get(LinkEntity.class, linkId);
             link.setLastUpdate(Timestamp.valueOf(newLastUpdateDate.toLocalDateTime()));
             session.flush();
+            transaction.commit();
         }
     }
 

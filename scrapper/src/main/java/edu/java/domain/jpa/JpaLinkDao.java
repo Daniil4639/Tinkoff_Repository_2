@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +26,12 @@ public class JpaLinkDao implements LinkDao {
     @Override
     public LinkResponse[] getLinksByChatRequest(long chatId) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
-            List<ConnectionEntity> idList = session.createQuery("from ConnectionEntity where"
-                    + " id.chat.id=" + chatId, ConnectionEntity.class).getResultList();
+            List<ConnectionEntity> idList = session.createQuery(String.format(
+                "from ConnectionEntity where id.chat.id=%d", chatId),
+                ConnectionEntity.class)
+                .getResultList();
 
             if (idList.isEmpty()) {
                 return null;
@@ -41,6 +44,8 @@ public class JpaLinkDao implements LinkDao {
                 responses[index] = new LinkResponse(Math.toIntExact(link.getId()), link.getUrl());
             }
 
+            transaction.commit();
+
             return responses;
         }
     }
@@ -48,7 +53,7 @@ public class JpaLinkDao implements LinkDao {
     @Override
     public void addLinkRequest(long chatId, String link, OffsetDateTime createdDate, OffsetDateTime updatedDate) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             ChatEntity chat = session.get(ChatEntity.class, chatId);
 
@@ -59,12 +64,13 @@ public class JpaLinkDao implements LinkDao {
             LinkEntity newLink = new LinkEntity(null, link,
                 Timestamp.valueOf(updatedDate.toLocalDateTime()),
                 Timestamp.valueOf(createdDate.toLocalDateTime()),
-                Timestamp.valueOf(OffsetDateTime.now().toLocalDateTime()));
+                getCurrTime());
 
             session.persist(newLink);
             session.persist(new ConnectionEntity(new ConnectionIds(chat, newLink)));
 
             session.flush();
+            transaction.commit();
         }
     }
 
@@ -73,19 +79,21 @@ public class JpaLinkDao implements LinkDao {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
-            return session.createQuery("from LinkEntity where url='" + link + "'",
+            return session.createQuery(String.format("from LinkEntity where url='%s'", link),
                     LinkEntity.class)
-                .getResultList().getFirst().getId();
+                .getResultList()
+                .getFirst()
+                .getId();
         }
     }
 
     @Override
     public void deleteLinkRequest(long chatId, long linkId) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
             List<ConnectionEntity> connections = session
-                .createQuery("from ConnectionEntity where id.link.id=" + linkId,
+                .createQuery(String.format("from ConnectionEntity where id.link.id=%d", linkId),
                     ConnectionEntity.class)
                 .getResultList();
 
@@ -102,6 +110,11 @@ public class JpaLinkDao implements LinkDao {
             }
 
             session.flush();
+            transaction.commit();
         }
+    }
+
+    private Timestamp getCurrTime() {
+        return Timestamp.valueOf(OffsetDateTime.now().toLocalDateTime());
     }
 }

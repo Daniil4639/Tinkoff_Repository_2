@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -18,13 +19,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 public class JdbcTest extends IntegrationEnvironment {
 
-    private final static JdbcChatRepository repository;
-    private final static JdbcLinkDao linkDao;
+    @Autowired
+    private JdbcChatRepository repository;
 
-    static {
-        repository = new JdbcChatRepository(template);
-        linkDao = new JdbcLinkDao(template);
-    }
+    @Autowired
+    private JdbcLinkDao linkDao;
 
     @After
     public void configAfter() {
@@ -35,6 +34,7 @@ public class JdbcTest extends IntegrationEnvironment {
 
     @Test
     public void addChatTest() throws ChatAlreadyExistsException {
+        System.out.println(POSTGRES.getJdbcUrl());
         repository.addChatRequest(12);
 
         assertThat(template.queryForObject(
