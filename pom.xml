@@ -182,6 +182,7 @@
                                 <artifactId>lombok</artifactId>
                             </exclude>
                         </excludes>
+                        <excludeDevtools>true</excludeDevtools>
                     </configuration>
                     <executions>
                         <execution>

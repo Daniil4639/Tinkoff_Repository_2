@@ -45,7 +45,6 @@ public class JpaLinkDao implements LinkDao {
             }
 
             transaction.commit();
-
             return responses;
         }
     }

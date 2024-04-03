@@ -6,15 +6,13 @@ import edu.java.exceptions.DoesNotExistException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Setter
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class JdbcChatRepository implements ChatRepository {
 
     private final JdbcTemplate jdbcTemplate;

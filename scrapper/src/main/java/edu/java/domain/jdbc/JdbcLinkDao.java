@@ -8,15 +8,13 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Setter
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class JdbcLinkDao implements LinkDao {
 
     private final JdbcTemplate jdbcTemplate;
