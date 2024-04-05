@@ -1,6 +1,6 @@
 package edu.java.scheduler;
 
-import edu.java.clients.BotClient;
+import edu.java.clients.bot.BotClient;
 import edu.java.exceptions.BadRequestException;
 import edu.java.responses.LinkDataBaseInfo;
 import java.util.Arrays;

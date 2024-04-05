@@ -12,6 +12,14 @@ public record ApplicationConfig(
     String telegramToken,
 
     @NotNull
-    String scrapperBaseUrl
+    String scrapperBaseUrl,
+
+    @NotNull
+    KafkaConfig kafka
 ) {
+    public record KafkaConfig(@NotNull String bootstrapServer,
+                              @NotNull String topicName,
+                              @NotNull String groupId,
+                              @NotNull int partitionsCount,
+                              @NotNull short replicationCount) {}
 }

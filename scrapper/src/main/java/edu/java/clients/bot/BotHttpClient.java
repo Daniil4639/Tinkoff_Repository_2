@@ -1,17 +1,19 @@
-package edu.java.clients;
+package edu.java.clients.bot;
 
+import edu.java.clients.Client;
 import edu.java.exceptions.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.responses.BotApiError;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
-public class BotClient extends Client {
+public class BotHttpClient extends Client implements BotClient {
 
-    public BotClient(String url) {
+    public BotHttpClient(String url) {
         super(url);
     }
 
+    @Override
     public Mono<String> updateLink(String url, int[] tgChatIds, String text)
         throws BadRequestException {
 

@@ -10,6 +10,12 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
 
     @NotNull
+    boolean useQueue,
+
+    @NotNull
+    KafkaConfig kafka,
+
+    @NotNull
     ApiConfig api,
 
     @NotNull
@@ -22,4 +28,9 @@ public record ApplicationConfig(
     public record ApiConfig(@NotNull String gitHubBaseUrl,
                             @NotNull String stackOverFlowBaseUrl,
                             @NotNull String botBaseUrl) {}
+
+    public record KafkaConfig(@NotNull String bootstrapServer,
+                              @NotNull String topicName,
+                              @NotNull int partitionsCount,
+                              @NotNull short replicationCount) {}
 }

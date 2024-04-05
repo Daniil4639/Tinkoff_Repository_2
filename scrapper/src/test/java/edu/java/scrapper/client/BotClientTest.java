@@ -1,12 +1,11 @@
 package edu.java.scrapper.client;
 
-import edu.java.clients.BotClient;
+import edu.java.clients.bot.BotHttpClient;
 import edu.java.exceptions.BadRequestException;
 import edu.java.scrapper.AbstractClientTest;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -28,7 +27,7 @@ public class BotClientTest extends AbstractClientTest {
         """;
 
     @Autowired
-    private BotClient client;
+    private BotHttpClient client;
 
     @Test
     public void updateLinkSuccessTest() throws BadRequestException {
