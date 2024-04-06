@@ -1,11 +1,11 @@
 app:
   database-access-type: jpa
   api:
-    bot-base-url: http://localhost:8090
-    github-base-url: https://api.github.com/
-    stackoverflow-base-url: https://api.stackexchange.com/2.3/questions/
+    bot-base-url: http://localhost:1234
+    github-base-url: http://localhost:1234
+    stackoverflow-base-url: http://localhost:1234
   scheduler:
-    enable: true
+    enable: false
     interval: 10s
     force-check-delay: 10s
 
@@ -30,16 +30,3 @@ spring:
     enabled: false
   application:
     name: scrapper
-
-server:
-  port: 8080
-
-logging:
-  config: classpath:log4j2-plain.xml
-
-springdoc:
-  show-actuator: true
-  swagger-ui:
-    path: /swagger-ui
-  api-docs:
-    path: /api-docs
