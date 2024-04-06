@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,11 @@ public class JpaLinkDao implements LinkDao {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            List<ConnectionEntity> idList = session.createQuery(String.format(
-                "from ConnectionEntity where id.chat.id=%d", chatId),
-                ConnectionEntity.class)
-                .getResultList();
+            Query<ConnectionEntity> query = session.createQuery("from ConnectionEntity where id.chat.id=:id",
+                ConnectionEntity.class);
+            query.setParameter("id", chatId);
+
+            List<ConnectionEntity> idList = query.getResultList();
 
             if (idList.isEmpty()) {
                 return null;
@@ -78,9 +80,11 @@ public class JpaLinkDao implements LinkDao {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
-            return session.createQuery(String.format("from LinkEntity where url='%s'", link),
-                    LinkEntity.class)
-                .getResultList()
+            Query<LinkEntity> query = session.createQuery("from LinkEntity where url=':link'",
+                LinkEntity.class);
+            query.setParameter("link", link);
+
+            return query.getResultList()
                 .getFirst()
                 .getId();
         }
@@ -91,10 +95,11 @@ public class JpaLinkDao implements LinkDao {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            List<ConnectionEntity> connections = session
-                .createQuery(String.format("from ConnectionEntity where id.link.id=%d", linkId),
-                    ConnectionEntity.class)
-                .getResultList();
+            Query<ConnectionEntity> query = session.createQuery("from ConnectionEntity where id.link.id=:linkId",
+                ConnectionEntity.class);
+            query.setParameter("linkId", linkId);
+
+            List<ConnectionEntity> connections = query.getResultList();
 
             boolean multiDependence = (connections.size() > 1);
 

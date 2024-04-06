@@ -34,7 +34,6 @@ public class JdbcTest extends IntegrationEnvironment {
 
     @Test
     public void addChatTest() throws ChatAlreadyExistsException {
-        System.out.println(POSTGRES.getJdbcUrl());
         repository.addChatRequest(12);
 
         assertThat(template.queryForObject(
