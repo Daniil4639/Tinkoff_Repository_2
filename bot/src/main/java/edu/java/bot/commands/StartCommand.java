@@ -30,7 +30,10 @@ public class StartCommand implements Command {
 
     @Override
     public String message(long chatId) {
-
-        return client.registerChat(chatId).block();
+        try {
+            return client.registerChat(chatId).block();
+        } catch (Exception ex) {
+            return getMessageFromException(ex);
+        }
     }
 }

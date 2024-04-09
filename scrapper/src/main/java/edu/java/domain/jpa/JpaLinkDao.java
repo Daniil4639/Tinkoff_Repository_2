@@ -80,9 +80,9 @@ public class JpaLinkDao implements LinkDao {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
-            Query<LinkEntity> query = session.createQuery("from LinkEntity where url=':link'",
+            Query<LinkEntity> query = session.createQuery("from LinkEntity where url=:url",
                 LinkEntity.class);
-            query.setParameter("link", link);
+            query.setParameter("url", link);
 
             return query.getResultList()
                 .getFirst()

@@ -1,6 +1,6 @@
 app:
-  scrapper-base-url: http://localhost:8080
-  telegram-token: ${TELEGRAM_TOKEN}
+  scrapper-base-url: http://localhost:1234
+  telegram-token: none
   retry-info:
     type: constant
     attempts: 3
@@ -14,16 +14,3 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
-
-server:
-  port: 8090
-
-logging:
-  config: classpath:log4j2-plain.xml
-
-springdoc:
-  show-actuator: true
-  swagger-ui:
-    path: /swagger-ui
-  api-docs:
-    path: /api-docs

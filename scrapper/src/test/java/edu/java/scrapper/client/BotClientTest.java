@@ -55,7 +55,7 @@ public class BotClientTest extends AbstractClientTest {
 
         StepVerifier.create(client.updateLink("testLink", new int[] {1, 2, 3}, ""))
             .expectErrorMatches(throwable -> {
-                assertThat(((BadRequestException)throwable).message).isEqualTo(INCORRECT_DATA_RESPONSE);
+                assertThat(throwable.getMessage()).isEqualTo(INCORRECT_DATA_RESPONSE);
                 return true;
             })
             .verify();

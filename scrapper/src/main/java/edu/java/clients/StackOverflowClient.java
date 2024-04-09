@@ -23,13 +23,14 @@ public class StackOverflowClient extends Client {
     public StackOverFlowResponse getInfo(String id) {
         String url = id + "?site=stackoverflow";
 
-        Optional<StackOverFlowResponseItems> responseItems =  client.get()
+        Optional<StackOverFlowResponseItems> responseItems =  retryTemplate.execute(args ->
+            client.get()
                 .uri(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(StackOverFlowResponseItems.class)
                 .log()
-                .blockOptional();
+                .blockOptional());
 
         if (responseItems.isEmpty()) {
             return null;
@@ -56,12 +57,13 @@ public class StackOverflowClient extends Client {
     private List<StackOverFlowAnswer> getAnswers(String id) {
         String uri = id + "/answers?site=stackoverflow";
 
-        Optional<StackOverFlowAnswersItems> answersItems = client.get()
+        Optional<StackOverFlowAnswersItems> answersItems = retryTemplate.execute(args ->
+            client.get()
             .uri(uri)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(StackOverFlowAnswersItems.class)
-            .blockOptional();
+            .blockOptional());
 
         return answersItems.map(StackOverFlowAnswersItems::getAnswers).orElse(null);
     }

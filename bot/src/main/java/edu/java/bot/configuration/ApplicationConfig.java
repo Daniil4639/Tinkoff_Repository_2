@@ -1,5 +1,6 @@
 package edu.java.bot.configuration;
 
+import edu.java.retry_constructs.RetryInfo;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,6 +13,9 @@ public record ApplicationConfig(
     String telegramToken,
 
     @NotNull
-    String scrapperBaseUrl
+    String scrapperBaseUrl,
+
+    @NotNull
+    RetryInfo retryInfo
 ) {
 }
