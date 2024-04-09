@@ -1,8 +1,8 @@
 package edu.java.controller;
 
+import edu.java.db_services.ChatService;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.exceptions.IncorrectRequest;
-import edu.java.jdbc.JdbcChatService;
 import edu.java.responses.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ScrapperChatController {
 
-    private final JdbcChatService chatService;
+    private final ChatService chatService;
 
     private final static String ID_MAPPING = "/{id}";
 

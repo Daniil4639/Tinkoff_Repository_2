@@ -1,29 +1,33 @@
 package edu.java.scrapper.db;
 
-import edu.java.domain.jooq.JooqChatRepository;
-import edu.java.domain.jooq.JooqLinkDao;
+import edu.java.domain.jpa.JpaChatRepository;
+import edu.java.domain.jpa.JpaLinkDao;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.responses.LinkResponse;
 import edu.java.scrapper.IntegrationEnvironment;
-import java.time.OffsetDateTime;
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import java.time.OffsetDateTime;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class JooqTest extends IntegrationEnvironment {
+public class JpaTest extends IntegrationEnvironment {
 
     @Autowired
-    private JooqChatRepository repository;
+    private SessionFactory factory;
 
     @Autowired
-    private JooqLinkDao linkDao;
+    private JpaChatRepository repository;
+
+    @Autowired
+    private JpaLinkDao linkDao;
 
     @After
     public void configAfter() {
