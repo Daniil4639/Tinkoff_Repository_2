@@ -1,4 +1,20 @@
 services:
+  grafana:
+    image: grafana/grafana:10.4.2
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prom
+
+  prom:
+    image: prom/prometheus:v2.51.2
+    volumes:
+      - ./prometheus.yml:/etc/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus.yml
+    ports:
+      - 9090:9090
+
   postgresql:
     image: postgres:16
     environment:

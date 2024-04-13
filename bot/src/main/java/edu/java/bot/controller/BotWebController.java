@@ -4,11 +4,12 @@ import edu.java.bot.service.MessageService;
 import edu.java.exceptions.IncorrectRequest;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.responses.ApiErrorResponse;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/updates")
-@RequiredArgsConstructor
 public class BotWebController {
 
     private final MessageService service;
+
+    private final Counter requestsCounter;
+
+    public BotWebController(MessageService service, MeterRegistry meterRegistry) {
+        this.service = service;
+        requestsCounter = meterRegistry.counter("processed_requests_count");
+    }
 
     @Operation(summary = "Отправить обновление")
     @ApiResponse(responseCode = "200", description = "Обновление обработано")
@@ -37,6 +44,7 @@ public class BotWebController {
         }
 
         service.sendUpdate(request);
+        requestsCounter.increment();
         return "Обновление обработано";
     }
 }
