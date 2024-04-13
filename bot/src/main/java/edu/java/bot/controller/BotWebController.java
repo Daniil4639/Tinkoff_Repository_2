@@ -27,6 +27,7 @@ public class BotWebController {
 
     public BotWebController(MessageService service, MeterRegistry meterRegistry) {
         this.service = service;
+
         requestsCounter = meterRegistry.counter("processed_requests_count");
     }
 

@@ -31,6 +31,7 @@ public class ScrapperChatController {
 
     public ScrapperChatController(ChatService chatService, MeterRegistry meterRegistry) {
         this.chatService = chatService;
+
         requestsCounter = meterRegistry.counter("processed_requests_count");
     }
 

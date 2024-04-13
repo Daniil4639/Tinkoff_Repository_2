@@ -34,6 +34,7 @@ public class ScrapperLinksController {
 
     public ScrapperLinksController(LinksService linksService, MeterRegistry meterRegistry) {
         this.linksService = linksService;
+
         requestsCounter = meterRegistry.counter("processed_requests_count");
     }
 
