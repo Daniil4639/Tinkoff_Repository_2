@@ -1,8 +1,8 @@
 app:
   useQueue: false
   kafka:
-    bootstrap-server: localhost:29092
-    topic-name: update-messages-topic
+    bootstrap-server: localhost:1235
+    topic-name: test
     partitions-count: 2
     replication-count: 1
   api:
