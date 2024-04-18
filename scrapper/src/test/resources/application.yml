@@ -1,4 +1,10 @@
 app:
+  useQueue: false
+  kafka:
+    bootstrap-server: localhost:1235
+    topic-name: test
+    partitions-count: 2
+    replication-count: 1
   database-access-type: jpa
   api:
     bot-base-url: http://localhost:1234

@@ -1,4 +1,10 @@
 app:
+  useQueue: true
+  kafka:
+    bootstrap-server: localhost:29092
+    topic-name: update-messages-topic
+    partitions-count: 2
+    replication-count: 1
   database-access-type: jpa
   api:
     bot-base-url: http://localhost:8090

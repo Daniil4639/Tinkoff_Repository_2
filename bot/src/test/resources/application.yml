@@ -1,6 +1,12 @@
 app:
   scrapper-base-url: http://localhost:1234
   telegram-token: none
+  kafka:
+    bootstrap-server: localhost:29092
+    topic-name: update-messages-topic
+    group-id: update
+    partitions-count: 1
+    replication-count: 1
   retry-info:
     type: constant
     attempts: 3
