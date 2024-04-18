@@ -43,7 +43,6 @@ public class MessageService {
                     log.error("Incorrect SendMessage handler!", exception);
                 }
 
-                command.message(update.message().chat().id());
                 return;
             }
         }

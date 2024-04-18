@@ -1,5 +1,6 @@
 package edu.java.bot.configuration;
 
+import edu.java.retry_constructs.RetryInfo;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +16,10 @@ public record ApplicationConfig(
     String scrapperBaseUrl,
 
     @NotNull
-    KafkaConfig kafka
+    KafkaConfig kafka,
+
+    @NotNull
+    RetryInfo retryInfo
 ) {
     public record KafkaConfig(@NotNull String bootstrapServer,
                               @NotNull String topicName,

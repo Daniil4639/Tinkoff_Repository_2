@@ -19,14 +19,18 @@ public class LinkProcessor {
 
         String resultMessage;
 
-        if (Boolean.TRUE.equals(client.checkTrack(id).block())) {
-            client.addLink(update.message().text(), id).block();
-            resultMessage = "Ресурс добавлен!";
-        } else if (Boolean.TRUE.equals(client.checkUntrack(id).block())) {
-            client.deleteLink(update.message().text(), id).block();
-            resultMessage = "Ресурс удален!";
-        } else {
-            resultMessage = "Сообщение не распознано!";
+        try {
+            if (Boolean.TRUE.equals(client.checkTrack(id).block())) {
+                client.addLink(update.message().text(), id).block();
+                resultMessage = "Ресурс добавлен!";
+            } else if (Boolean.TRUE.equals(client.checkUntrack(id).block())) {
+                client.deleteLink(update.message().text(), id).block();
+                resultMessage = "Ресурс удален!";
+            } else {
+                resultMessage = "Сообщение не распознано!";
+            }
+        } catch (Exception ex) {
+            resultMessage = ex.getMessage();
         }
 
         bot.execute(new SendMessage(id, resultMessage));

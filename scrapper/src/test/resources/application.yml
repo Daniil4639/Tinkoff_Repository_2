@@ -5,17 +5,62 @@ app:
     topic-name: test
     partitions-count: 2
     replication-count: 1
+  database-access-type: jpa
   api:
     bot-base-url: http://localhost:1234
     github-base-url: http://localhost:1234
     stackoverflow-base-url: http://localhost:1234
+  retry-info:
+    type: constant
+    attempts: 3
+    interval: 500
+    codes: 500, 502, 503, 504
   scheduler:
     enable: false
     interval: 10s
     force-check-delay: 10s
 
 spring:
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - rate-limit-buckets-scrapper
+    caffeine:
+      spec: maximumSize=10000,expireAfterAccess=120s
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        connection:
+          driver_class: org.postgresql.Driver
+          url: jdbc:postgresql://localhost:5432/scrapper
+          username: postgres
+          password: postgres
+        hbm2ddl:
+          auto: validate
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
   liquibase:
     enabled: false
   application:
     name: scrapper
+
+bucket4j:
+  cache-to-use: jcache
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets-scrapper
+      url: (?!.*(track|untrack)).*
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"exceptionMessage\": \"
+The request limit has been exceeded. Try it later!\" }"
+      rate-limits:
+        - cache-key: "getHeader('X-Forwarded-For')"
+          bandwidths:
+            - capacity: 10
+              time: 1
+              unit: minutes
+              refill-speed: interval

@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(classes = BotApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
 public class AbstractClientTest {
 
     private final static int PORT = 1234;

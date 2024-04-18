@@ -7,6 +7,11 @@ app:
     group-id: update
     partitions-count: 1
     replication-count: 1
+  retry-info:
+    type: constant
+    attempts: 3
+    interval: 500
+    codes: 500, 502, 503, 504
 
 spring:
   autoconfigure:

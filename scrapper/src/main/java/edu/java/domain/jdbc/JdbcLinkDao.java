@@ -1,5 +1,6 @@
 package edu.java.domain.jdbc;
 
+import edu.java.domain.interfaces.LinkDao;
 import edu.java.responses.LinkResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -7,18 +8,19 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Setter
+@Transactional
 @RequiredArgsConstructor
-public class JdbcLinkDao {
+public class JdbcLinkDao implements LinkDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public LinkResponse[] getLinksByChatRequest(int chatId) {
+    @Override
+    public LinkResponse[] getLinksByChatRequest(long chatId) {
         List<Integer> idList = jdbcTemplate.query("SELECT * FROM Chat_Link_Connection WHERE "
             + "chat_id=?", (rs, rowNum) -> rs.getInt("link_id"), chatId);
 
@@ -35,7 +37,8 @@ public class JdbcLinkDao {
             .toArray(new LinkResponse[]{});
     }
 
-    public void addLinkRequest(int chatId, String link, OffsetDateTime createdDate,
+    @Override
+    public void addLinkRequest(long chatId, String link, OffsetDateTime createdDate,
         OffsetDateTime updatedDate) {
 
         Integer count = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chats WHERE chat_id=?",
@@ -57,14 +60,17 @@ public class JdbcLinkDao {
             + " url=?)) ON CONFLICT DO NOTHING", chatId, link);
     }
 
-    public Integer getLinkId(String link) {
+    @Override
+    public Long getLinkId(String link) {
         return jdbcTemplate.queryForObject("SELECT id FROM Links WHERE url=?",
-            Integer.class, link);
+            Long.class, link);
     }
 
-    public void deleteLinkRequest(int chatId, int linkId) {
+    @Override
+    public void deleteLinkRequest(long chatId, long linkId) {
         jdbcTemplate.update("DELETE FROM Chat_Link_Connection WHERE chat_id=? AND link_id=?",
             chatId, linkId);
+
 
         Integer linkCount = jdbcTemplate.queryForObject("SELECT COUNT(1) FROM Chat_Link_Connection "
             + "WHERE link_id=?", Integer.class, linkId);

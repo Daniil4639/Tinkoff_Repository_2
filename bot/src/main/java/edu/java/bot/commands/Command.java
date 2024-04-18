@@ -12,4 +12,11 @@ public interface Command {
     SendMessage handle(Update update);
 
     String message(long chatId);
+
+    default String getMessageFromException(Exception ex) {
+        String message = ex.getMessage();
+        int messageInd = message.indexOf(":");
+
+        return message.substring(messageInd + 1);
+    }
 }

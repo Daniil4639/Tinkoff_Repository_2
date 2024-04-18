@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LinkUpdateScheduler {
 
-    private final JdbcSchedulerService schedulerService;
+    private final SchedulerService schedulerService;
     private final BotClient client;
 
     @Scheduled(fixedDelayString = "#{@schedulerInterval}")
@@ -35,8 +35,12 @@ public class LinkUpdateScheduler {
             Pair<Boolean, String> updateInfo = schedulerService.hadUpdated(linkInfo);
             if (updateInfo.getLeft()) {
 
-                log.info(client.updateLink(linkInfo.getUrl(), Arrays.stream(linkInfo.getTgChatIds())
-                    .mapToInt(Integer::intValue).toArray(), updateInfo.getRight()).block());
+                try {
+                    log.info(client.updateLink(linkInfo.getUrl(), Arrays.stream(linkInfo.getTgChatIds())
+                        .mapToInt(Integer::intValue).toArray(), updateInfo.getRight()).block());
+                } catch (Exception ex) {
+                    log.error(ex.getMessage());
+                }
             }
         }
     }

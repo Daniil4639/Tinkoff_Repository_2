@@ -74,5 +74,9 @@ public abstract class IntegrationEnvironment {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+
+        registry.add("spring.jpa.properties.hibernate.connection.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.jpa.properties.hibernate.connection.username", POSTGRES::getUsername);
+        registry.add("spring.jpa.properties.hibernate.connection.password", POSTGRES::getPassword);
     }
 }

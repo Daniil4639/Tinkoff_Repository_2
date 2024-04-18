@@ -32,18 +32,22 @@ public class ListCommand implements Command {
 
     @Override
     public String message(long chatId) {
-        LinkResponseList list = client.getLinks(chatId).block();
-        StringBuilder result = new StringBuilder();
+        try {
+            LinkResponseList list = client.getLinks(chatId).block();
+            StringBuilder result = new StringBuilder();
 
-        if (list == null || list.getSize() == 0) {
-            result.append("Список отслеживаемых ресурсов пуст!");
-        } else {
-            result.append("Отслеживаемые ссылки:").append(System.lineSeparator());
-            Arrays.stream(list.getLinks()).forEach(response -> {
-                result.append(response.getUrl()).append(System.lineSeparator());
-            });
+            if (list == null || list.getSize() == 0) {
+                result.append("Список отслеживаемых ресурсов пуст!");
+            } else {
+                result.append("Отслеживаемые ссылки:").append(System.lineSeparator());
+                Arrays.stream(list.getLinks()).forEach(response -> {
+                    result.append(response.getUrl()).append(System.lineSeparator());
+                });
+            }
+
+            return result.toString();
+        } catch (Exception ex) {
+            return ex.getMessage();
         }
-
-        return result.toString();
     }
 }
