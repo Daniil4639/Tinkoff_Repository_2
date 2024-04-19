@@ -17,7 +17,8 @@ target/
 *.iws
 *.iml
 *.ipr
-Dockerfile
+bot.Dockerfile
+scrapper.Dockerfile
 
 ### NetBeans ###
 /nbproject/private/

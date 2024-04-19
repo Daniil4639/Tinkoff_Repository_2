@@ -1,13 +1,13 @@
 app:
   useQueue: true
   kafka:
-    bootstrap-server: localhost:29092
+    bootstrap-server: ${KAFKA_LINK}
     topic-name: update-messages-topic
     partitions-count: 2
     replication-count: 1
-  database-access-type: jpa
+  database-access-type: jdbc
   api:
-    bot-base-url: http://localhost:8090
+    bot-base-url: ${BOT_LINK}
     github-base-url: https://api.github.com/
     stackoverflow-base-url: https://api.stackexchange.com/2.3/questions/
   retry-info:
@@ -35,13 +35,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         connection:
           driver_class: org.postgresql.Driver
-          url: jdbc:postgresql://localhost:5432/scrapper
+          url: ${DB_LINK}
           username: postgres
           password: postgres
         hbm2ddl:
           auto: validate
   datasource:
-    url: jdbc:postgresql://localhost:5432/scrapper
+    url: ${DB_LINK}
     username: postgres
     password: postgres
   liquibase:
