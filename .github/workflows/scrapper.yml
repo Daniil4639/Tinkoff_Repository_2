@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: scrapper-app
+  IMAGE_NAME: ${{ github.repository }}-scrapper
 
 jobs:
   build:
@@ -46,7 +46,7 @@ jobs:
       - name: build and push docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: .
+          context: ./scrapper
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
