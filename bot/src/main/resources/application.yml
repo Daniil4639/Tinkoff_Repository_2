@@ -1,8 +1,8 @@
 app:
-  scrapper-base-url: http://localhost:8080
+  scrapper-base-url: ${SCRAPPER_LINK}
   telegram-token: ${TELEGRAM_TOKEN}
   kafka:
-    bootstrap-server: localhost:29092
+    bootstrap-server: ${KAFKA_LINK}
     topic-name: update-messages-topic
     group-id: update
     partitions-count: 1

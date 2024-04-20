@@ -18,6 +18,7 @@ public class SchedulerConfiguration {
         return config.scheduler().interval().toMillis();
     }
 
+    @Bean
     @ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jdbc")
     public SchedulerService getJdbcService(JdbcSchedulerDao jdbcSchedulerDao,
         GitHubService gitHubService,
