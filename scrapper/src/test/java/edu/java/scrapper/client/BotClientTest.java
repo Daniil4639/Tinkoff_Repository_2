@@ -1,6 +1,6 @@
 package edu.java.scrapper.client;
 
-import edu.java.clients.BotClient;
+import edu.java.clients.bot.BotHttpClient;
 import edu.java.exceptions.BadRequestException;
 import edu.java.scrapper.AbstractClientTest;
 import org.apache.http.HttpStatus;
@@ -27,7 +27,7 @@ public class BotClientTest extends AbstractClientTest {
         """;
 
     @Autowired
-    private BotClient client;
+    private BotHttpClient client;
 
     @Test
     public void updateLinkSuccessTest() throws BadRequestException {
