@@ -4,11 +4,12 @@ import edu.java.db_services.ChatService;
 import edu.java.exceptions.DoesNotExistException;
 import edu.java.exceptions.IncorrectRequest;
 import edu.java.responses.ApiErrorResponse;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tg-chat")
-@RequiredArgsConstructor
 public class ScrapperChatController {
 
     private final ChatService chatService;
 
+    private final Counter requestsCounter;
+
     private final static String ID_MAPPING = "/{id}";
+
+    public ScrapperChatController(ChatService chatService, MeterRegistry meterRegistry) {
+        this.chatService = chatService;
+
+        requestsCounter = meterRegistry.counter("processed_requests_count");
+    }
 
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponse(responseCode = "200", description = "Чат зарегистрирован")
@@ -35,6 +43,7 @@ public class ScrapperChatController {
     @ResponseStatus(HttpStatus.OK)
     public String chatRegistration(@PathVariable Long id) throws IncorrectRequest {
 
+        requestsCounter.increment();
         return chatService.addChat(id);
     }
 
@@ -50,6 +59,7 @@ public class ScrapperChatController {
         IncorrectRequest, DoesNotExistException {
 
         chatService.deleteChat(id);
+        requestsCounter.increment();
         return "Чат успешно удалён";
     }
 

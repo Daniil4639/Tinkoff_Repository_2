@@ -8,11 +8,12 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.LinkResponseList;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/links")
-@RequiredArgsConstructor
 public class ScrapperLinksController {
 
     private final LinksService linksService;
+
+    private final Counter requestsCounter;
+
+    public ScrapperLinksController(LinksService linksService, MeterRegistry meterRegistry) {
+        this.linksService = linksService;
+
+        requestsCounter = meterRegistry.counter("processed_requests_count");
+    }
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponse(responseCode = "200", description = "Ссылки успешно получены")
@@ -38,6 +46,7 @@ public class ScrapperLinksController {
     @ResponseStatus(HttpStatus.OK)
     public LinkResponseList getLinks(@RequestParam Integer tgChatId) throws IncorrectRequest {
 
+        requestsCounter.increment();
         return linksService.getLinksByChat(tgChatId);
     }
 
@@ -51,6 +60,7 @@ public class ScrapperLinksController {
         @RequestBody AddLinkRequest request) throws IncorrectRequest {
 
         linksService.addLink(tgChatId, request.getLink());
+        requestsCounter.increment();
         return new LinkResponse(tgChatId, request.getLink());
     }
 
@@ -67,6 +77,7 @@ public class ScrapperLinksController {
         DoesNotExistException {
 
         linksService.deleteLink(tgChatId, request.getLink());
+        requestsCounter.increment();
         return new LinkResponse(tgChatId, request.getLink());
     }
 }
