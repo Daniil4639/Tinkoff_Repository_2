@@ -38,7 +38,10 @@ public class LinkProcessor {
     }
 
     public void clear(long chatId) {
-        client.deleteTrack(chatId);
-        client.deleteUntrack(chatId);
+        try {
+            client.deleteTrack(chatId);
+            client.deleteUntrack(chatId);
+        } catch (Exception ignored) {
+        }
     }
 }
